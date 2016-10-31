@@ -1,0 +1,631 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Schema",
+    "definitions": {
+        "Schema": {
+            "title": "schemaDefinition",
+            "type": "object",
+            "required": [
+                "configuration", "physical", "logical"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "configuration": {
+                    "title": "configuration",
+                    "type": "object",
+                    "required": [],
+                    "additionalProperties": false,
+                    "properties": {
+                        "baseLanguage": {
+                            "type": "string",
+                            "enum": [
+                                "English", "German", "French"
+                            ]
+                        }
+                    }
+                },
+                "physical": {
+                    "$ref": "#/definitions/Physical"
+                },
+                "logical": {
+                    "$ref": "#/definitions/Logical"
+                }
+            }
+        },
+        "Physical": {
+            "title": "physical",
+            "type": "object",
+            "required": [
+                "sources", "tables", "joins"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "sources": {
+                    "type": "array",
+                    "title": "sources",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "sourceName", "sourceType"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "sourceName": {
+                                "type": "string"
+                            },
+                            "sourceType": {
+                                "type": "string"
+                            },
+                            "directory": {
+                                "type": "string"
+                            },
+                            "connectionString": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "tables": {
+                    "type": "array",
+                    "title": "tables",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "tableName"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "tableName": {
+                                "type": "string"
+                            },
+                            "tableSource": {
+                                "type": "string"
+                            },
+                            "tableType": {
+                                "type": "string",
+                                "default": "file",
+                                "enum": [
+                                    "File", "Table", "View"
+                                ]
+                            },
+                            "tableFileFormat": {
+                                "type": "string",
+                                "default": "CSV"
+                            },
+                            "tableFileHasHeader": {
+                                "type": "boolean",
+                                "default": false
+                            },
+                            "tableFileExcelRange": {
+                                "type": "string"
+                            },
+                            "tableQuery": {
+                                "type": "string"
+                            },
+                            "tableFileDelimiter": {
+                                "type": "string"
+                            },
+                            "columns": {
+                                "type": "array",
+                                "title": "columns",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "columnName", "columnHeader", "columnDataType"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "columnName": {
+                                            "type": "string"
+                                        },
+                                        "columnHeader": {
+                                            "type": "string"
+                                        },
+                                        "columnDataType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string", "number", "integer", "boolean"
+                                            ]
+                                        },
+                                        "columnIsKey": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "columnWidth": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "joins": {
+                    "type": "array",
+                    "title": "joins",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "joinName", "tableFrom", "tableTo", "joinCardinality", "joinColumns"
+                        ],
+                        "properties": {
+                            "joinName": {
+                                "type": "string"
+                            },
+                            "tableFrom": {
+                                "type": "string"
+                            },
+                            "tableTo": {
+                                "type": "string"
+                            },
+                            "joinType": {
+                                "type": "string",
+                                "enum": [
+                                    "Inner", "Full Outer", "Left Outer", "Right Outer", "Cross"
+                                ]
+                            },
+                            "joinCardinality": {
+                                "type": "string",
+                                "enum": [
+                                    "One2One", "One2Many", "Many2One", "Many2Many"
+                                ]
+                            },
+                            "joinActive": {
+                                "type": "string"
+                            },
+                            "joinColumns": {
+                                "type": "array",
+                                "title": "joinColumns",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "columnFrom", "columnTo"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "columnFrom": {
+                                            "type": "string"
+                                        },
+                                        "columnTo": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Logical": {
+            "title": "logical",
+            "type": "object",
+            "required": [
+                "dimensions", "facts"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "dimensions": {
+                    "type": "array",
+                    "title": "dimensions",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "dimensionName", "attributes"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "dimensionName": {
+                                "type": "string"
+                            },
+                            "dimensionTemplate": {
+                                "type": "string",
+                                "enum": [
+                                    "Dim1", "Dim2", "Dim3"
+                                ]
+                            },
+                            "attributes": {
+                                "type": "array",
+                                "title": "attributes",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "attributeName", "attributeTable", "attributeNameColumn", "attributeKeyColumns"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "attributeName": {
+                                            "type": "string"
+                                        },
+                                        "attributeTemplate": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Attr1", "Attr2", "Attr3"
+                                            ]
+                                        },
+                                        "attributeTable": {
+                                            "type": "string"
+                                        },
+                                        "attributeNameColumn": {
+                                            "type": "string"
+                                        },
+                                        "attributeSortColumn": {
+                                            "type": "string"
+                                        },
+                                        "attributeFormat": {
+                                            "type": "string"
+                                        },
+                                        "attributeParents": {
+                                            "type": "array",
+                                            "title": "attributeParents",
+                                            "items": {
+                                                "type": "object",
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "attrbiuteParent": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "attributeIsRecursive": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "attributeParentColumns": {
+                                            "type": "array",
+                                            "title": "attributeParentColumns",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "attrbiuteParentTable", "attrbiuteParentColumn"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "attrbiuteParentTable": {
+                                                        "type": "string"
+                                                    },
+                                                    "attrbiuteParentColumn": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "attributeKeyColumns": {
+                                            "type": "array",
+                                            "title": "attributeKeyColumns",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "attrbiuteKeyTable", "attrbiuteKeyColumn"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "attrbiuteKeyTable": {
+                                                        "type": "string"
+                                                    },
+                                                    "attrbiuteKeyColumn": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "attributeProperties": {
+                                            "type": "array",
+                                            "title": "attributeProperties",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "attributeProperty", "attributePropertyTable", "attributePropertyColumn"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "attributeProperty": {
+                                                        "type": "string"
+                                                    },
+                                                    "attributePropertyTable": {
+                                                        "type": "string"
+                                                    },
+                                                    "attributePropertyColumn": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "attributeLocalizations": {
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "attributeLanguage", "attributeLocal", "attributeLocalizationTable", "attributeLocalizationColumn"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "attributeLanguage": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "English", "German", "French"
+                                                        ]
+                                                    },
+                                                    "AttributeLocal": {
+                                                        "type": "string"
+                                                    },
+                                                    "attributeLocalizationTable": {
+                                                        "type": "string"
+                                                    },
+                                                    "attributeLocalizationColumn": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "hierarchies": {
+                                "type": "array",
+                                "title": "hierarchies",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "hierarchyName", "levels"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "hierarchyName": {
+                                            "type": "string"
+                                        },
+                                        "hierarchyType": {
+                                            "type": "string",
+                                            "default": "Normal",
+                                            "enum": [
+                                                "Normal", "Recursive"
+                                            ]
+                                        },
+                                        "hierarchyAttribute": {
+                                            "type": "string"
+                                        },
+                                        "hierarchyTemplate": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Hier1", "Hier2", "Hier3"
+                                            ]
+                                        },
+                                        "hierarchyLocalizations": {
+                                            "type": "array",
+                                            "title": "HierarchyLocalizations",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "HierarchyLanguage", "HierarchyLocal"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "HierarchyLanguage": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "English", "German", "French"
+                                                        ]
+                                                    },
+                                                    "HierarchyLocal": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "levels": {
+                                            "type": "array",
+                                            "title": "levels",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "levelAttribute": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "dimensionLocalizations": {
+                                "type": "array",
+                                "title": "dimensionLocalizations",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "dimensionLanguage", "dimensionLocal"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "dimensionLanguage": {
+                                            "type": "string",
+                                            "enum": [
+                                                "English", "German", "French"
+                                            ]
+                                        },
+                                        "dimensionLocal": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "facts": {
+                    "type": "array",
+                    "title": "facts",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "factName", "factTable", "keys", "measures"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "factName": {
+                                "type": "string"
+                            },
+                            "factTemplate": {
+                                "type": "string"
+                            },
+                            "factTable": {
+                                "type": "string"
+                            },
+                            "keys": {
+                                "type": "array",
+                                "title": "keys",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "keyDimension", "keyAttribute", "keyColumns"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "keyDimension": {
+                                            "type": "string"
+                                        },
+                                        "keyAttribute": {
+                                            "type": "string"
+                                        },
+                                        "keyRole": {
+                                            "type": "string",
+                                            "default": "none"
+                                        },
+                                        "keyColumns": {
+                                            "type": "object",
+                                            "required": [],
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "keyColumn": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "measures": {
+                                "type": "array",
+                                "title": "measures",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "measureName", "measureColumn", "measureClass"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "measureName": {
+                                            "type": "string"
+                                        },
+                                        "measureColumn": {
+                                            "type": "string"
+                                        },
+                                        "measureFormat": {
+                                            "type": "string"
+                                        },
+                                        "measureAggregation": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Sum", "Average", "Count", "Distinct Count", "Min", "Max", "Begining Balance", "Ending Balance", "Average Balance"
+                                            ]
+                                        },
+                                        "measurePolarity": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Positive", "Negative", "Centered"
+                                            ]
+                                        },
+                                        "measureClass": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Volume", "Value", "Percentage", "Rate", "Ratio"
+                                            ]
+                                        },
+                                        "measureLocalizations": {
+                                            "type": "array",
+                                            "title": "measureLocalizations",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "measureLanguage", "measureLocal"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "measureLanguage": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "English", "German", "French"
+                                                        ]
+                                                    },
+                                                    "measureLocal": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "aggregates": {
+                                "type": "array",
+                                "title": "aggregates",
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "aggregateTableName", "aggregateKeys"
+                                    ],
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "aggregateTableName": {
+                                            "type": "string"
+                                        },
+                                        "aggregateKeys": {
+                                            "type": "array",
+                                            "title": "aggregateKeys",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "measureLanguage", "measureLocal"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "aggregateKeyDimension": {
+                                                        "type": "string"
+                                                    },
+                                                    "aggregateKeyAttribute": {
+                                                        "type": "string"
+                                                    },
+                                                    "aggregateKeyRole": {
+                                                        "type": "string",
+                                                        "defaultt": "none"
+                                                    },
+                                                    "aggregateKeyColumns": {
+                                                        "type": "array",
+                                                        "title": "aggregateKeyColumns",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "required": [],
+                                                            "additionalProperties": false,
+                                                            "properties": {
+                                                                "aggregateKeyColumn": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

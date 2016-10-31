@@ -1,0 +1,22 @@
+<!-- <div class="modal-header">
+    <h5 class="modal-title" id="modal-title">
+        Enter DB Name
+    </h5>
+</div> -->
+<div class="modal-body" id="modal-body">
+    <div class="form-group">
+        <label>
+            Database Name
+        </label>
+        <select class="form-control" ng-model="selectedDatabase">
+            <option ng-value="{{item.name}}" ng-repeat="item in databaseList track by $index">
+                {{item.name}}
+            </option>
+        </select>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" type="button">
+        Go
+    </button>
+</div>

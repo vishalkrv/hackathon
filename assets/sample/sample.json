@@ -1,0 +1,911 @@
+{
+    "schemaDefinition": {
+        "configuration": {
+            "baseLanguage": "English"
+        },
+        "physical": {
+            "sources": [
+                {
+                    "sourceName": "SQL",
+                    "sourceType": "SQL Server",
+                    "connectionString": "ccc"
+                }, {
+                    "sourceName": "Local",
+                    "sourceType": "Data Lake",
+                    "directory": "/files/molsoncoors/landing"
+                }
+            ],
+            "tables": [
+                {
+                    "tableName": "Dim_Time",
+                    "tableSource": "SQL",
+                    "tableType": "query",
+                    "tableQuery": "select * from Dim_Hier_Time where Week_Id > '2011-01-01'",
+                    "columns": [
+                        {
+                            "columnName": "Week_Id",
+                            "columnHeader": "Week_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Week_Name",
+                            "columnHeader": "Week",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Period_Id",
+                            "columnHeader": "Period_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Period_Name",
+                            "columnHeader": "Period",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Quarter_Id",
+                            "columnHeader": "Quarter_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Quarter_Name",
+                            "columnHeader": "Quarter",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Year_Id",
+                            "columnHeader": "Year_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Year_Name",
+                            "columnHeader": "Year",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Dim_Prod",
+                    "tableSource": "local",
+                    "tableType": "file",
+                    "tableFileFormat": "CSV",
+                    "tableFileHasHeader": true,
+                    "columns": [
+                        {
+                            "columnName": "UPC_Id",
+                            "columnHeader": "UPC_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "UPC_Code",
+                            "columnHeader": "UPC Code",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "UPC_Name",
+                            "columnHeader": "UPC",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Brand_Id",
+                            "columnHeader": "Brand_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Brand_Name",
+                            "columnHeader": "Brand",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Category_Id",
+                            "columnHeader": "Category_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Category_Name",
+                            "columnHeader": "Category",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Dim_Cust",
+                    "tableSource": "SQL",
+                    "tableType": "query",
+                    "tableQuery": "select * from dim_Cust",
+                    "columns": [
+                        {
+                            "columnName": "Store_Id",
+                            "columnHeader": "Store_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Store_Code",
+                            "columnHeader": "Store Code",
+                            "columnDataType": "string",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Store_Name",
+                            "columnHeader": "Store (eng)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Store_Name_German",
+                            "columnHeader": "Store (ger)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Store_Name_French",
+                            "columnHeader": "Store (fre)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Store_Lng",
+                            "columnHeader": "Store Longitude",
+                            "columnDataType": "number",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Store_Lat",
+                            "columnHeader": "Store Latitude",
+                            "columnDataType": "number",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Store_Address",
+                            "columnHeader": "Store Address",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Retailer_Id",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Retailer_Name",
+                            "columnHeader": "Retailer (eng)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Retailer_Name_German",
+                            "columnHeader": "Retailer (ger)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Retailer_Name_French",
+                            "columnHeader": "Retailer (fre)",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Dim_TP",
+                    "tableSource": "local",
+                    "tableType": "file",
+                    "tableFileFormat": "Excel",
+                    "tableFileHasHeader": false,
+                    "tableFileExcelRange": "A1:E5364",
+                    "columns": [
+                        {
+                            "columnName": "Plan_Id",
+                            "columnHeader": "Plan_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Plan_Name",
+                            "columnHeader": "Tactical Plan",
+                            "columnDataType": "string",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Store_Id",
+                            "columnHeader": "Store_Id",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Dim_GLAcct",
+                    "tableSource": "SQL",
+                    "tableType": "table",
+                    "columns": [
+                        {
+                            "columnName": "GLAcct_Id",
+                            "columnHeader": "Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "GLAcct_Name",
+                            "columnHeader": "Name",
+                            "columnDataType": "string",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "GLAcct_Par_Id",
+                            "columnHeader": "Parent Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Fact_Ship",
+                    "tableSource": "local",
+                    "tableType": "file",
+                    "tableFileFormat": "Fixed",
+                    "tableFileHasHeader": true,
+                    "tableFileExcelRange": "file",
+                    "columns": [
+                        {
+                            "columnName": "Week_Id",
+                            "columnHeader": "Week_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "Y",
+                            "columnWidth": 10
+                        }, {
+                            "columnName": "Store_Id",
+                            "columnHeader": "Store_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y",
+                            "columnWidth": 10
+                        }, {
+                            "columnName": "UPC_Id",
+                            "columnHeader": "UPC_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y",
+                            "columnWidth": 10
+                        }, {
+                            "columnName": "Ship_Qty",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "decimal",
+                            "columnIsKey": "N",
+                            "columnWidth": 20
+                        }, {
+                            "columnName": "Ship_Val",
+                            "columnHeader": "Retailer",
+                            "columnDataType": "currency",
+                            "columnIsKey": "N",
+                            "columnWidth": 20
+                        }
+                    ]
+                }, {
+                    "tableName": "Fact_ShipPlan",
+                    "tableSource": "local",
+                    "tableType": "file",
+                    "tableFileFormat": "Delimitied",
+                    "tableFileHasHeader": true,
+                    "tableFileExcelRange": "file",
+                    "tableFileDelimiter": "|",
+                    "columns": [
+                        {
+                            "columnName": "Week_Id",
+                            "columnHeader": "Week_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Retailer_Id",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Plan_Id",
+                            "columnHeader": "Cust_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Plan_Qty",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "decimal",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Plan_Val",
+                            "columnHeader": "Retailer",
+                            "columnDataType": "currency",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }, {
+                    "tableName": "Fact_Ship_by_Ret_Yr",
+                    "tableSource": "local",
+                    "tableType": "file",
+                    "tableFileFormat": "CSV",
+                    "tableFileHasHeader": true,
+                    "tableFileExcelRange": "file",
+                    "columns": [
+                        {
+                            "columnName": "Year_Id",
+                            "columnHeader": "Year_Id",
+                            "columnDataType": "date",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Retailer_Id",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "UPC_Id",
+                            "columnHeader": "UPC_Id",
+                            "columnDataType": "int",
+                            "columnIsKey": "Y"
+                        }, {
+                            "columnName": "Ship_Qty",
+                            "columnHeader": "Retailer_Id",
+                            "columnDataType": "decimal",
+                            "columnIsKey": "N"
+                        }, {
+                            "columnName": "Ship_Val",
+                            "columnHeader": "Retailer",
+                            "columnDataType": "currency",
+                            "columnIsKey": "N"
+                        }
+                    ]
+                }
+            ],
+            "joins": [
+                {
+                    "joinName": "TP2Cust",
+                    "tableFrom": "Dim_TP",
+                    "tableTo": "Dim_Cust",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "Store_Id",
+                            "columnTo": "Store_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "Ship2Time",
+                    "tableFrom": "Fact_Ship",
+                    "tableTo": "Dim_Time",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "Week_Id",
+                            "columnTo": "Week_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "Ship2Prod",
+                    "tableFrom": "Fact_Ship",
+                    "tableTo": "Dim_Prod",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "UPC_Id",
+                            "columnTo": "UPC_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "Ship2Cust",
+                    "tableFrom": "Fact_Ship",
+                    "tableTo": "Dim_Cust",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "Store_Id",
+                            "columnTo": "Store_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "ShipPlan2Time",
+                    "tableFrom": "Fact_ShipPlan",
+                    "tableTo": "Dim_Time",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "Week_Id",
+                            "columnTo": "Week_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "ShipPlan2Prod",
+                    "tableFrom": "Fact_ShipPlan",
+                    "tableTo": "Dim_Prod",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "UPC_Id",
+                            "columnTo": "UPC_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "ShipPlan2Cust",
+                    "tableFrom": "Fact_ShipPlan",
+                    "tableTo": "Dim_Cust",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "Plan_Id",
+                            "columnTo": "Plan_Id"
+                        }
+                    ]
+                }, {
+                    "joinName": "GLAcct2Par",
+                    "tableFrom": "Dim_GLAcct",
+                    "tableTo": "Dim_GLAcct",
+                    "joinType": "Inner",
+                    "joinCardinality": "Many2One",
+                    "joinActive": "Y",
+                    "joinColumns": [
+                        {
+                            "columnFrom": "GLAcct_Id",
+                            "columnTo": "GLAcct_Par_Id"
+                        }
+                    ]
+                }
+            ]
+        },
+        "logical": {
+            "dimensions": [
+                {
+                    "dimensionName": "Time",
+                    "dimensionTemplate": "Time",
+                    "attributes": [
+                        {
+                            "attributeName": "Week",
+                            "attributeTemplate": "Week",
+                            "attributeTable": "Dim_Time",
+                            "attributeNameColumn": "Week_Name",
+                            "attributeSortColumn": "Week_Id",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attrbiuteParent": "Period"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Time",
+                                    "attrbiuteKeyColumn": "Week_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Period",
+                            "attributeTemplate": "Period",
+                            "attributeTable": "Dim_Time",
+                            "attributeNameColumn": "Period_Name",
+                            "attributeSortColumn": "Period_Id",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attrbiuteParent": "Quarter"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Time",
+                                    "attrbiuteKeyColumn": "Period_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Quarter",
+                            "attributeTemplate": "Quarter",
+                            "attributeTable": "Dim_Time",
+                            "attributeNameColumn": "Quarter_Name",
+                            "attributeSortColumn": "Quarter_Id",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attrbiuteParent": "Year"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Time",
+                                    "attrbiuteKeyColumn": "Quarter_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Year",
+                            "attributeTemplate": "Year",
+                            "attributeTable": "Dim_Time",
+                            "attributeNameColumn": "Year_Name",
+                            "attributeSortColumn": "Year_Id",
+                            "attributeFormat": "none",
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Time",
+                                    "attrbiuteKeyColumn": "Year_Id"
+                                }
+                            ]
+                        }
+                    ],
+                    "hierarchies": [
+                        {
+                            "hierarchyName": "Fiscal",
+                            "levels": [
+                                {
+                                    "levelAttribute": "Year"
+                                }, {
+                                    "levelAttribute": "Quarter"
+                                }, {
+                                    "levelAttribute": "Period"
+                                }, {
+                                    "levelAttribute": "Week"
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "dimensionName": "Product",
+                    "dimensionTemplate": "Product",
+                    "attributes": [
+                        {
+                            "attributeName": "UPC",
+                            "attributeTemplate": "UPC",
+                            "attributeTable": "Dim_Prod",
+                            "attributeNameColumn": "UPC_Name",
+                            "attributeSortColumn": "UPC_Name",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attrbiuteParent": "Brand"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Prod",
+                                    "attrbiuteKeyColumn": "UPC_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Brand",
+                            "attributeTemplate": "Brand",
+                            "attributeTable": "Dim_Prod",
+                            "attributeNameColumn": "Brand_Name",
+                            "attributeSortColumn": "Brand_Name",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attrbiuteParent": "Category"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Prod",
+                                    "attrbiuteKeyColumn": "Brand_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Category",
+                            "attributeTemplate": "Category",
+                            "attributeTable": "Dim_Prod",
+                            "attributeNameColumn": "Category_Name",
+                            "attributeSortColumn": "Category_Name",
+                            "attributeFormat": "none",
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Prod",
+                                    "attrbiuteKeyColumn": "Category_Id"
+                                }
+                            ]
+                        }
+                    ],
+                    "hierarchies": [
+                        {
+                            "hierarchyName": "Hierarchy",
+                            "levels": [
+                                {
+                                    "levelAttribute": "Category"
+                                }, {
+                                    "levelAttribute": "Brand"
+                                }, {
+                                    "levelAttribute": "UPC"
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "dimensionName": "Customer",
+                    "dimensionTemplate": "none",
+                    "attributes": [
+                        {
+                            "attributeName": "Plan",
+                            "attributeTemplate": "none",
+                            "attributeTable": "Dim_TP",
+                            "attributeNameColumn": "Plan_Name",
+                            "attributeSortColumn": "Plan_Name",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attributeParent": "Store"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_TP",
+                                    "attrbiuteKeyColumn": "Plan_Id"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Store",
+                            "attributeTemplate": "Store",
+                            "attributeTable": "Dim_Cust",
+                            "attributeNameColumn": "Store_Name",
+                            "attributeSortColumn": "Store_Name",
+                            "attributeFormat": "none",
+                            "attributeParents": [
+                                {
+                                    "attributeParent": "Retailer"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Cust",
+                                    "attrbiuteKeyColumn": "Store_Id"
+                                }
+                            ],
+                            "attributeProperties": [
+                                {
+                                    "attributeProperty": "Store Longitude",
+                                    "attributePropertyTable": "Dim_Cust",
+                                    "attributePropertyColumn": "Store_Lng"
+                                }, {
+                                    "attributeProperty": "Store Latitude",
+                                    "attributePropertyTable": "Dim_Cust",
+                                    "attributePropertyColumn": "Store_Lat"
+                                }, {
+                                    "attributeProperty": "Store Address",
+                                    "attributePropertyTable": "Dim_Cust",
+                                    "attributePropertyColumn": "Store_Address"
+                                }
+                            ],
+                            "attributeLocalizations": [
+                                {
+                                    "attrbiuteLanguage": "German",
+                                    "attrbiuteLocal": "Speichern",
+                                    "attrbiuteLocalizationTable": "Dim_Cust",
+                                    "attrbiuteLocalizationColumn": "Store_Name_German"
+                                }, {
+                                    "attrbiuteLanguage": "French",
+                                    "attrbiuteLocal": "Magasin",
+                                    "attrbiuteLocalizationTable": "Dim_Cust",
+                                    "attrbiuteLocalizationColumn": "Store_Name_French"
+                                }
+                            ]
+                        }, {
+                            "attributeName": "Retailer",
+                            "attributeTemplate": "Retailer",
+                            "attributeTable": "Dim_Cust",
+                            "attributeNameColumn": "Retailer_Name",
+                            "attributeSortColumn": "Retailer_Name",
+                            "attributeFormat": "none",
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_Cust",
+                                    "attrbiuteKeyColumn": "Retailer_Id"
+                                }
+                            ],
+                            "attributeLocalizations": [
+                                {
+                                    "attrbiuteLocalization": "German",
+                                    "attrbiuteLocal": "Händler",
+                                    "attrbiuteLocalizationTable": "Dim_Cust",
+                                    "attrbiuteLocalizationColumn": "Retailer_Name_German"
+                                }, {
+                                    "attrbiuteLocalization": "French",
+                                    "attrbiuteLocal": "Détaillant",
+                                    "attrbiuteLocalizationTable": "Dim_Cust",
+                                    "attrbiuteLocalizationColumn": "Retailer_Name_French"
+                                }
+                            ]
+                        }
+                    ],
+                    "hierarchies": [
+                        {
+                            "hierarchyName": "Hierarchy",
+                            "hierarchyTemplate": "",
+                            "levels": [
+                                {
+                                    "levelAttribute": "Retailer"
+                                }, {
+                                    "levelAttribute": "Store"
+                                }, {
+                                    "levelAttribute": "Plan"
+                                }
+                            ],
+                            "HierarchyLocalizations": [
+                                {
+                                    "HierarchyLanguage": "German",
+                                    "HierarchyLocal": "Hierarchie"
+                                }, {
+                                    "HierarchyLanguage": "French",
+                                    "HierarchyLocal": "Hiérarchie"
+                                }
+                            ]
+                        }
+                    ],
+                    "dimensionLocalizations": [
+                        {
+                            "dimensionLanguage": "German",
+                            "dimensionLocal": "Kunden"
+                        }, {
+                            "dimensionLanguage": "French",
+                            "dimensionLocal": "Client"
+                        }
+                    ]
+                }, {
+                    "dimensionName": "GL Account",
+                    "dimensionTemplate": "none",
+                    "attributes": [
+                        {
+                            "attributeName": "Account",
+                            "attributeTemplate": "none",
+                            "attributeTable": "Dim_GLAcct",
+                            "attributeNameColumn": "GLAcct_Name",
+                            "attributeSortColumn": "GLAcct_Name",
+                            "attributeFormat": "none",
+                            "attributeIsRecursive": "Y",
+                            "attributeParentColumns": [
+                                {
+                                    "attrbiuteParentTable": "Dim_GLAcct",
+                                    "attrbiuteParentColumn": "GLAcct_Par_Id"
+                                }
+                            ],
+                            "attributeKeyColumns": [
+                                {
+                                    "attrbiuteKeyTable": "Dim_GLAcct",
+                                    "attrbiuteKeyColumn": "GLAcct_Id"
+                                }
+                            ]
+                        }
+                    ],
+                    "hierarchies": [
+                        {
+                            "hierarchyName": "Hierarchy",
+                            "hierarchyType": "Recursive",
+                            "hierarchyAttribute": "Account",
+                            "hierarchyTemplate": "",
+                            "levels": [
+                                {
+                                    "level": "Entity"
+                                }, {
+                                    "level": "Account Class"
+                                }, {
+                                    "level": "Posting Accout"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "facts": [
+                {
+                    "factName": "Shipments",
+                    "factTemplate": "none",
+                    "factTable": "Fact_Ship",
+                    "keys": [
+                        {
+                            "keyDimension": "Time",
+                            "keyAttribute": "Week",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "Week_Id"
+                            }
+                        }, {
+                            "keyDimension": "Product",
+                            "keyAttribute": "UPC",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "UPC_Id"
+                            }
+                        }, {
+                            "keyDimension": "Customer",
+                            "keyAttribute": "Store",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "Store_Id"
+                            }
+                        }
+                    ],
+                    "measures": [
+                        {
+                            "measureName": "Shipped Quantity",
+                            "measureColumn": "Ship_Qty",
+                            "measureFormat": "#,#",
+                            "measureAggregation": "sum",
+                            "measurePolarity": "positive",
+                            "measureClass": "vol",
+                            "measureLocalizations": {
+                                "measureLocalization": {
+                                    "attributeLanguage": "German",
+                                    "attributeLocal": "Zeit"
+                                }
+                            }
+                        }, {
+                            "measureName": "Shipped Value",
+                            "measureColumn": "Ship_Val",
+                            "measureFormat": "$#,#.00",
+                            "measureAggregation": "sum",
+                            "measurePolarity": "positive",
+                            "measureClass": "fin"
+                        }
+                    ],
+                    "aggregates": [
+                        {
+                            "aggregateTableName": "Fact_Ship_by_Ret_Yr",
+                            "aggregateKeys": [
+                                {
+                                    "aggregateKeyDimension": "Time",
+                                    "aggregateKeyAttribute": "Year",
+                                    "aggregateKeyRole": "none",
+                                    "aggregateKeyColumns": {
+                                        "keyColumn": "Year_Id"
+                                    }
+                                }, {
+                                    "aggregateKeyDimension": "Product",
+                                    "aggregateKeyAttribute": "UPC",
+                                    "aggregateKeyRole": "none",
+                                    "aggregateKeyColumns": {
+                                        "keyColumn": "UPC_Id"
+                                    }
+                                }, {
+                                    "aggregateKeyDimension": "Customer",
+                                    "aggregateKeyAttribute": "Retailer",
+                                    "aggregateKeyRole": "none",
+                                    "aggregateKeyColumns": {
+                                        "keyColumn": "Retailer_Id"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "factName": "Planned Shipments",
+                    "factTemplate": "none",
+                    "factTable": "Fact_PlanShip",
+                    "keys": [
+                        {
+                            "keyDimension": "Time",
+                            "keyAttribute": "Week",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "Week_Id"
+                            }
+                        }, {
+                            "keyDimension": "Product",
+                            "keyAttribute": "UPC",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "UPC_Id"
+                            }
+                        }, {
+                            "keyDimension": "Customer",
+                            "keyAttribute": "Plan",
+                            "keyRole": "none",
+                            "keyColumns": {
+                                "keyColumn": "Plan_Id"
+                            }
+                        }
+                    ],
+                    "measures": [
+                        {
+                            "measureName": "Planned Quantity",
+                            "measureColumn": "Plan_Qty",
+                            "measureFormat": "#,#",
+                            "measureAggregation": "sum",
+                            "measurePolarity": "positive",
+                            "measureClass": "vol"
+                        }, {
+                            "measureName": "Planned Value",
+                            "measureColumn": "Plan_Val",
+                            "measureFormat": "$#,#.00",
+                            "measureAggregation": "sum",
+                            "measurePolarity": "positive",
+                            "measureClass": "vol"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

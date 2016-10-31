@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h5 class="modal-title toUpper" id="modal-title">
+        Info
+    </h5>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="form-group">
+        <label>
+            {{data.key}}
+        </label>
+        <span>
+            {{data.obj[data.key]}}
+        </span>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" type="button">
+        Go
+    </button>
+</div>
