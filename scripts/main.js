@@ -48,10 +48,41 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         loadData: function() {
             $http.get(myConfig.url + '3861.json').then(function(response) {
                 $scope.table.list = response.data;
+                $scope.loadPlumbs();
                 console.log($scope.table.list);
             });
         }
     };
+
+    $scope.loadPlumbs = function(){
+        angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx){
+            $scope.table.addToCanvas(idx);
+        });
+        $scope.drawJoins();
+    }
+
+    $scope.drawJoins = function(){
+        angular.forEach($scope.table.tableObjects, function(val, idx){
+            var matchedJoin = $scope.table.list.schemaDefinition.physical.joins.filter(function (joinObj) {
+                return (val.tableName === joinObj.tableTo);
+            });
+            angular.forEach(matchedJoin, function(val2, idx2){
+                var matchedTable = $scope.table.tableObjects.filter(function (tableObj) {
+                    return (val2.tableFrom === tableObj.tableName);
+                });
+                if(matchedTable.length > 0){
+                    var conn = {
+                         uuid: matchedTable[0].targets[0].uuid
+                    };
+                    if(val.connections == undefined){
+                         val.connections = [];
+                    }
+                    val.connections.push(conn);
+                }
+            });
+        });
+    }
+
     $scope.table = {
         list: '',
         openPopup:function(obj, key){
@@ -100,13 +131,13 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                     uuid: getNextUUID()
                 }, {
                     uuid: getNextUUID()
-                }, ],
+                }],
                 'targets': [{
                     uuid: getNextUUID()
                 }, {
                     uuid: getNextUUID()
                 }],
-                'x': 10,
+                'x': 10 + 300 * index,
                 'y': 10
             };
             angular.extend(this.list.schemaDefinition.physical.tables[index], obj);
