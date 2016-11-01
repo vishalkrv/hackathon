@@ -4,13 +4,26 @@
     </h5>
 </div>
 <div class="modal-body" id="modal-body">
-    <div class="form-group">
-        <label>
-            {{data.key}}
-        </label>
-        <span>
-            {{data.obj[data.key]}}
-        </span>
+    <div ng-if="data.key === 'baseLanguage'">
+      <label>
+          {{data.key}} : {{data.obj[data.key]}}
+      </label>
+    </div>
+    <div ng-if="data.key == 'sources'"class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default" ng-repeat="(key, val) in data.obj[data.key] track by $index">
+        <div class="panel-heading" role="tab" id="heading{{$index}}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$index}}" aria-expanded="true" aria-controls="collapse{{$index}}">
+          <h4 class="panel-title">
+            <a role="button">
+              {{val.sourceType}}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{$index}}" class="panel-collapse collapse {{$index == 0 ? 'in':''}}" role="tabpanel" aria-labelledby="heading{{$index}}">
+          <div class="panel-body">
+            <p ng-repeat="(key1, val1) in val">{{key1}} : {{val1}}</p>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 <div class="modal-footer">

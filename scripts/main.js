@@ -54,7 +54,17 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         }
     };
 
+    $scope.getIndexOf = function(arr, val, prop) {
+        var l = arr.length, k = 0;
+        for (k = 0; k < l; k = k + 1) {
+            if (arr[k][prop] === val) {
+              return k;
+            }
+        }
+    }
+
     $scope.loadPlumbs = function(){
+        // Adds all the tables to the CANVAS
         angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx){
             $scope.table.addToCanvas(idx);
         });
@@ -62,24 +72,23 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
     }
 
     $scope.drawJoins = function(){
-        angular.forEach($scope.table.tableObjects, function(val, idx){
-            var matchedJoin = $scope.table.list.schemaDefinition.physical.joins.filter(function (joinObj) {
-                return (val.tableName === joinObj.tableTo);
+        // Maps evevry table with the other table based on the JOINS mapped in INPUT json
+        angular.forEach($scope.table.list.schemaDefinition.physical.joins, function(val, idx){
+            var matchedFromTable = $scope.table.tableObjects.filter(function (joinObj) {
+                return (val.tableFrom === joinObj.tableName);
             });
-            angular.forEach(matchedJoin, function(val2, idx2){
-                var matchedTable = $scope.table.tableObjects.filter(function (tableObj) {
-                    return (val2.tableFrom === tableObj.tableName);
-                });
-                if(matchedTable.length > 0){
-                    var conn = {
-                         uuid: matchedTable[0].targets[0].uuid
-                    };
-                    if(val.connections == undefined){
-                         val.connections = [];
-                    }
-                    val.connections.push(conn);
+            var matchedToTable = $scope.table.tableObjects.filter(function (joinObj) {
+                return (val.tableTo === joinObj.tableName);
+            });
+            if(matchedFromTable.length > 0){
+                var conn = {
+                     uuid: matchedToTable[0].targets[0].uuid
+                };
+                if(matchedFromTable[0].sources[0].connections == undefined){
+                     matchedFromTable[0].sources[0].connections = [];
                 }
-            });
+                matchedFromTable[0].sources[0].connections.push(conn);
+            }
         });
     }
 
@@ -137,12 +146,11 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 }, {
                     uuid: getNextUUID()
                 }],
-                'x': 10 + 300 * index,
-                'y': 10
+                'x': 10 + 150 * index,
+                'y': 10 + 50 * index
             };
             angular.extend(this.list.schemaDefinition.physical.tables[index], obj);
             this.tableObjects.push(this.list.schemaDefinition.physical.tables[index]);
-            console.log(this.tableObjects);
         },
         tableObjects: [],
         close: function($index) {
