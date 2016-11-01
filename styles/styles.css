@@ -261,3 +261,8 @@ body {
 .toUpper{
     text-transform: capitalize;
 }
+
+
+.ngdialog.ngdialog-theme-default.bigPopup .ngdialog-content {
+    width: 60%;
+}

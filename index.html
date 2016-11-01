@@ -12,6 +12,7 @@
         <link href="styles/styles.css" rel="stylesheet"/>
         <link href="assets/styles/tree.css" rel="stylesheet"/>
         <link href="assets/styles/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/scripts/ui-grid/ui-grid.min.css" rel="stylesheet" type="text/css"/>
     </head>
     <body ng-controller="MainCtrl">
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -50,8 +51,8 @@
                                                 <li class="file toUpper" ng-repeat="item in v">
                                                     <label class="toUpper" for="{{item.tableName}}">
                                                         {{item.tableName}}
-                                                        <a cls="btn btn-primary" ng-click="table.addColumn($index)">
-                                                            <i aria-hidden="true" class="fa fa-plus-circle">
+                                                        <a cls="btn btn-primary" ng-click="table.openTableDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
                                                             </i>
                                                         </a>
                                                         <a cls="btn btn-primary" ng-click="table.addToCanvas($index)">
@@ -59,14 +60,6 @@
                                                             </i>
                                                         </a>
                                                     </label>
-                                                    <input id="{{item.tableName}}" type="checkbox"/>
-                                                    <ol>
-                                                        <li ng-repeat="col in item.columns">
-                                                            <span>
-                                                                {{col.columnName}}
-                                                            </span>
-                                                        </li>
-                                                    </ol>
                                                 </li>
                                             </ol>
                                         </li>
@@ -109,6 +102,8 @@
         <script src="assets/scripts/jquery.jsPlumb-1.6.2-min.js" type="text/javascript">
         </script>
         <script src="assets/scripts/ngStorage.js" type="text/javascript">
+        </script>
+        <script src="assets/scripts/ui-grid/ui-grid.min.js" type="text/javascript">
         </script>
         <script src="scripts/main.js">
         </script>

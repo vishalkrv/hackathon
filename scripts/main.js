@@ -1,4 +1,4 @@
-var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage']);
+var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage','ui.grid']);
 jsPlumb.ready(function() {
     angular.element(document).ready(function() {
         angular.bootstrap(document, ['NDXHackathon']);
@@ -53,48 +53,45 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
             });
         }
     };
-
     $scope.getIndexOf = function(arr, val, prop) {
-        var l = arr.length, k = 0;
+        var l = arr.length,
+            k = 0;
         for (k = 0; k < l; k = k + 1) {
             if (arr[k][prop] === val) {
-              return k;
+                return k;
             }
         }
     }
-
-    $scope.loadPlumbs = function(){
+    $scope.loadPlumbs = function() {
         // Adds all the tables to the CANVAS
-        angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx){
+        angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx) {
             $scope.table.addToCanvas(idx);
         });
         $scope.drawJoins();
     }
-
-    $scope.drawJoins = function(){
+    $scope.drawJoins = function() {
         // Maps evevry table with the other table based on the JOINS mapped in INPUT json
-        angular.forEach($scope.table.list.schemaDefinition.physical.joins, function(val, idx){
-            var matchedFromTable = $scope.table.tableObjects.filter(function (joinObj) {
+        angular.forEach($scope.table.list.schemaDefinition.physical.joins, function(val, idx) {
+            var matchedFromTable = $scope.table.tableObjects.filter(function(joinObj) {
                 return (val.tableFrom === joinObj.tableName);
             });
-            var matchedToTable = $scope.table.tableObjects.filter(function (joinObj) {
+            var matchedToTable = $scope.table.tableObjects.filter(function(joinObj) {
                 return (val.tableTo === joinObj.tableName);
             });
-            if(matchedFromTable.length > 0){
+            if (matchedFromTable.length > 0) {
                 var conn = {
-                     uuid: matchedToTable[0].targets[0].uuid
+                    uuid: matchedToTable[0].targets[0].uuid
                 };
-                if(matchedFromTable[0].sources[0].connections == undefined){
-                     matchedFromTable[0].sources[0].connections = [];
+                if (matchedFromTable[0].sources[0].connections == undefined) {
+                    matchedFromTable[0].sources[0].connections = [];
                 }
                 matchedFromTable[0].sources[0].connections.push(conn);
             }
         });
     }
-
     $scope.table = {
         list: '',
-        openPopup:function(obj, key){
+        openPopup: function(obj, key) {
             var modal = ngDialog.open({
                 template: 'views/popupInfo.html',
                 className: 'ngdialog-theme-default',
@@ -102,8 +99,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 resolve: {
                     data: function() {
                         return {
-                            obj:obj,
-                            key:key
+                            obj: obj,
+                            key: key
                         };
                     }
                 }
@@ -126,12 +123,33 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 }]
             });
         },
+        //Not using this
         addColumn: function(index) {
             this.list.physical.tables[index].columns.push({
                 columnName: 'Dummy Column',
                 columnDataType: 'string',
                 columnHeader: 'Dummy_Column',
                 columnIsKey: 'Y',
+            });
+        },
+        //openTablePopup
+        openTableDetails: function(index) {
+            var data = this.list.schemaDefinition.physical.tables[index]
+            var tModal = ngDialog.open({
+                template: 'views/tableDetails.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'popTableCtrl',
+                resolve: {
+                    tableInfo: function() {
+                        return {
+                            data: data,
+                            index: index
+                        };
+                    }
+                }
+            });
+            tModal.closePromise.then(function(data) {
+                console.log(data);
             });
         },
         addToCanvas: function(index) {
@@ -163,33 +181,40 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
      *
      */
     $scope.targetEndpointStyle = {
-        endpoint:"Dot",
-        paintStyle:{ fillStyle:"#7AB02C",radius:11 },
-        maxConnections:-1,
-        isTarget:true
+        endpoint: "Dot",
+        paintStyle: {
+            fillStyle: "#7AB02C",
+            radius: 11
+        },
+        maxConnections: -1,
+        isTarget: true
     };
-
     $scope.sourceEndpointStyle = {
-        endpoint:"Dot",
-        paintStyle:{
-            strokeStyle:"#7AB02C",
-            fillStyle:"transparent",
-            radius:7,
-            lineWidth:3
+        endpoint: "Dot",
+        paintStyle: {
+            strokeStyle: "#7AB02C",
+            fillStyle: "transparent",
+            radius: 7,
+            lineWidth: 3
         },
-        isSource:true,
-        maxConnections:-1,
-        connector:[ "Flowchart", { stub:[30, 30], gap:20, cornerRadius:10, alwaysRespectStubs:true } ],
-        connectorStyle:{
-            lineWidth:4,
-            strokeStyle:"#61B7CF",
-            joinstyle:"round",
-            outlineColor:"white",
-            outlineWidth:2
+        isSource: true,
+        maxConnections: -1,
+        connector: ["Flowchart", {
+            stub: [30, 30],
+            gap: 20,
+            cornerRadius: 10,
+            alwaysRespectStubs: true
+        }],
+        connectorStyle: {
+            lineWidth: 4,
+            strokeStyle: "#61B7CF",
+            joinstyle: "round",
+            outlineColor: "white",
+            outlineWidth: 2
         },
-        connectorHoverStyle:{
-            fillStyle:"#216477",
-            strokeStyle:"#216477"
+        connectorHoverStyle: {
+            fillStyle: "#216477",
+            strokeStyle: "#216477"
         }
     };
     $scope.onConnection = function(instance, connection, targetUUID, sourceUUID) {
@@ -212,8 +237,30 @@ app.controller('popupCtrl', ['$scope', 'database', function($scope, database) {
         $scope.closeThisDialog($scope.selectedDatabase);
     };
 }]);
-
 app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
     console.log(data)
 }]);
+
+app.controller('popTableCtrl', ['$scope', 'tableInfo', function($scope, tableInfo){
+    $scope.table = tableInfo.data;
+    $scope.gridOptions = {
+        data:$scope.table.columns,
+        columnDefs: [{
+            field: 'columnName',
+            displayName: 'Name'
+        },{
+            field: 'columnIsKey',
+            displayName: 'Is Key'
+        },{
+            field: 'columnHeader',
+            displayName: 'Header'
+        }, {
+            field: 'columnDataType',
+            displayName: 'Data Type',
+        }],
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        multiSelect: false
+    };
+}])
