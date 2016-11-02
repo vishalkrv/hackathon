@@ -32,7 +32,7 @@
                         <div data-angular-treeview="true" data-tree-id="mytree" data-tree-model="roleList"
                             data-node-id="roleId" data-node-label="roleName" data-node-children="children">
                         </div>
-                    
+
                     </div> -->
                         <div class="col-md-4 treeNode">
                             <ol class="tree">
@@ -65,6 +65,10 @@
                                                         {{item.tableName}}
                                                         <a cls="btn btn-primary" ng-click="table.openTableDetails($index)">
                                                             <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                        <a cls="btn btn-primary" ng-click="table.removeTable($index)">
+                                                            <i aria-hidden="true" class="glyphicon glyphicon-remove-circle text-danger">
                                                             </i>
                                                         </a>
                                                         <a cls="btn btn-primary" ng-click="table.addToCanvas($index)">

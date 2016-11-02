@@ -198,6 +198,10 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         tableObjects: [],
         close: function($index) {
             this.tableObjects.splice($index, 1);
+        },
+        removeTable: function(index){
+            $scope.table.tableObjects.splice(index, 1);
+            $scope.table.list.schemaDefinition.physical.tables.splice(index, 1);
         }
     };
     /**
