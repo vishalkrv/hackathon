@@ -63,37 +63,41 @@
             </div>
         </div>
     </form>
-    <div class="well display-flex" ng-repeat="j in join track by $index" ng-mouseover="hoverRemove = true" ng-mouseleave="hoverRemove = false">
-        <div class="col-md-5">
-            <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join[$index].colFrom">
-                <option value="" selected="selected">
-                    --SELECT--
-                </option>
-                <option ng-repeat="column in fromCols" ng-value="column.columnName">
-                    {{column.columnName}}
-                </option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            To
-        </div>
-        <div class="col-md-5">
-            <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join[$index].colTo">
-                <option value="" selected="selected">
-                    --SELECT--
-                </option>
-                <option ng-repeat="column in toCols" ng-value="column.columnName">
-                    {{column.columnName}}
-                </option>
-            </select>
-        </div>
-        <i class="glyphicon glyphicon-remove-circle text-danger remove-join" ng-if="hoverRemove" ng-click="removeJoin($index)"></i>
+    <div>
+        <table class="table">
+              <tr ng-repeat="col in join.joinColumns track by $index">
+                  <td class="center">
+                      {{join.joinColumns.length - 1 != $index ? col.columnFrom : ''}}
+                      <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join.joinColumns[$index].columnFrom" ng-if="join.joinColumns.length - 1 === $index">
+                          <option value="" selected="selected">
+                              --SELECT--
+                          </option>
+                          <option ng-repeat="column in fromCols" ng-value="column.columnName">
+                              {{column.columnName}}
+                          </option>
+                      </select>
+                  </td>
+                  <td style="width: 5%">To</td>
+                  <td class="center">
+                      {{join.joinColumns.length - 1 != $index ? col.columnTo : ''}}
+                      <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join.joinColumns[$index].columnTo" ng-if="join.joinColumns.length - 1 === $index">
+                          <option value="" selected="selected">
+                              --SELECT--
+                          </option>
+                          <option ng-repeat="column in toCols" ng-value="column.columnName">
+                              {{column.columnName}}
+                          </option>
+                      </select>
+                  </td>
+                  <td class="center" style="width: 15%">
+                      <i class="glyphicon glyphicon-minus-sign pull-right" ng-click="removeJoin($index)"></i>
+                      <i class="glyphicon glyphicon-plus-sign pull-right" ng-click="addNewJoin()" ng-if="join.joinColumns.length - 1 === $index"></i>
+                  </td>
+              </tr>
+        </table>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primay" ng-click="addNewJoin()">
-        New Join
-    </button>
     <button class="btn btn-success" ng-click="save()">
         Save
     </button>

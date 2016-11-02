@@ -304,3 +304,12 @@ body {
   cursor: pointer;
   right: -20px;
 }
+
+.center {
+  text-align: center;
+}
+
+.table tr td.center .glyphicon{
+  font-size: 26px;
+  margin-left: 10px;
+}

@@ -109,6 +109,9 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 resolve: {
                     tableList: function() {
                         return $scope.table.list.schemaDefinition.physical.tables
+                    },
+                    joinsList: function(){
+                        return $scope.table.list.schemaDefinition.physical.joins
                     }
                 }
             });
@@ -263,30 +266,23 @@ app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
     console.log(data);
 }]);
-angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', function($scope, tableList) {
+angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', 'joinsList', function($scope, tableList, joinsList) {
     $scope.tables = tableList;
-    $scope.join = [{
-        joinName: '',
-        tableFrom: '',
-        tableTo: '',
-        colFrom: '',
-        colTo: '',
-        joinCardinality: '',
-        joinActive: '',
-        joinColumns: []
-    }, {
-        joinName: '',
-        tableFrom: '',
-        tableTo: '',
-        colFrom: '',
-        colTo: '',
-        joinCardinality: '',
-        joinActive: '',
-        joinColumns: []
-    }];
+    $scope.join = {
+        "joinName": "",
+        "tableFrom": "",
+        "tableTo": "",
+        "joinCardinality": "",
+        "joinActive": "",
+        "joinColumns": [{
+            "columnFrom": "",
+            "columnTo": ""
+        }]
+    };
     $scope.save = function(){
         console.log($scope.join);
-        //$scope.closeThisDialog($scope.selectedDatabase);
+        joinsList.push($scope.join);
+        $scope.closeThisDialog();
     }
 
     $scope.selectedFromTable = function(table){
@@ -303,20 +299,14 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
         $scope.toCols = selTable[0].columns;
     }
 
-    $scope.addNewJoin = function(table){
-        $scope.join.push({
-            joinName: '',
-            tableFrom: '',
-            tableTo: '',
-            colFrom: '',
-            colTo: '',
-            joinCardinality: '',
-            joinActive: '',
-            joinColumns: []
+    $scope.addNewJoin = function(){
+        $scope.join.joinColumns.push({
+            "columnFrom": "",
+            "columnTo": ""
         });
     }
 
     $scope.removeJoin = function(index){
-        $scope.join.splice(index, 1);
+        $scope.join.joinColumns.splice(index, 1);
     }
 }])
