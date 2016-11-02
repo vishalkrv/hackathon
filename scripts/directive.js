@@ -255,3 +255,27 @@ myApp.directive('jsPlumbConnection', function($timeout) {
     };
     return def;
 });
+
+myApp.directive( 'editTableName', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      value: '='
+    },
+    template: '<span ng-dblclick="edit()" ng-bind="value"></span><input ng-model="value" style="height: 28px;"></input>',
+    link: function ( $scope, element, attrs ) {
+      var inputElement = angular.element( element.children()[1] );
+      element.addClass( 'edit-table-name' );
+      $scope.editing = false;
+      $scope.edit = function () {
+          $scope.editing = true;
+          element.addClass( 'active' );
+          inputElement[0].focus();
+      };
+      inputElement.on( 'blur', function() {
+          $scope.editing = false;
+          element.removeClass( 'active' );
+      });
+    }
+  };
+});

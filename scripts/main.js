@@ -298,4 +298,4 @@ app.controller('popTableCtrl', ['$scope', 'tableInfo', 'uiGridConstants', functi
             $scope.gridApi = gridApi;
         }
     };
-}])
+}]);

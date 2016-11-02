@@ -80,7 +80,7 @@ body {
 .dropArea {
     background: #fff url(../assets/images/il-grid-trans.png) repeat;
     /*height: 550px;*/
-    overflow:hidden; 
+    overflow:hidden;
     height:100%;
 }
 
@@ -182,17 +182,17 @@ body {
 /* jsPlumb */
 
 
-.plumbObj{  
+.plumbObj{
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;
     -webkit-box-shadow: 2px 2px 19px #aaa;
     -moz-box-shadow: 2px 2px 19px #aaa;
     -moz-border-radius: 0.5em;
     border-radius: 0.5em;
-    filter: alpha(opacity=80);    
+    filter: alpha(opacity=80);
     z-index: 10;
     position: absolute;
-}  
+}
 
 
 
@@ -265,4 +265,20 @@ body {
 
 .ngdialog.ngdialog-theme-default.bigPopup .ngdialog-content {
     width: 60%;
+}
+
+.edit-table-name span {
+  cursor: pointer;
+}
+
+.edit-table-name input {
+  display: none;
+}
+
+.edit-table-name.active span {
+  display: none;
+}
+
+.edit-table-name.active input {
+  display: inline-block;
 }
