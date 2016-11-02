@@ -292,3 +292,7 @@ body {
 .ui-grid-cell:last-child {
     text-align: center;
 }
+
+.display-flex{
+  display: flex;
+}

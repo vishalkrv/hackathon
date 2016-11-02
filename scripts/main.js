@@ -277,4 +277,18 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
         console.log($scope.join);
         //$scope.closeThisDialog($scope.selectedDatabase);
     }
+
+    $scope.selectedFromTable = function(table){
+        var selTable = $scope.tables.filter(function(obj){
+            return obj.tableName == table;
+        });
+        $scope.fromCols = selTable[0].columns;
+    }
+
+    $scope.selectedToTable = function(table){
+        var selTable = $scope.tables.filter(function(obj){
+            return obj.tableName == table;
+        });;
+        $scope.toCols = selTable[0].columns;
+    }
 }])
