@@ -272,6 +272,10 @@ app.controller('popTableCtrl', ['$scope', 'tableInfo', 'uiGridConstants', functi
             "columnIsKey": ""
         });
     };
+    $scope.deleteRow = function(row) {
+        var index = $scope.gridOptions.data.indexOf(row.entity);
+        $scope.gridOptions.data.splice(index, 1);
+   };
     $scope.gridOptions = {
         data:$scope.table.columns,
         columnDefs: [{
@@ -290,6 +294,11 @@ app.controller('popTableCtrl', ['$scope', 'tableInfo', 'uiGridConstants', functi
             name: 'columnDataType',
             displayName: 'Data Type',
             cellEditableCondition: $scope.editable
+        }, {
+            name: 'delete',
+            displayName: '',
+            cellEditableCondition: false,
+            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
         }],
         enableRowSelection: true,
         enableRowHeaderSelection: true,

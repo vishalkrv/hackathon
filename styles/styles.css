@@ -282,3 +282,13 @@ body {
 .edit-table-name.active input {
   display: inline-block;
 }
+
+.btn-delete{
+  padding: 1px 10px;
+  margin: 2px;
+  text-align: center;
+}
+
+.ui-grid-cell:last-child {
+    text-align: center;
+}
