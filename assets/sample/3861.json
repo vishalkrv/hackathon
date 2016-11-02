@@ -556,7 +556,7 @@
             "joins": [{
                 "joinName": "TP2Cust",
                 "tableFrom": "Dim_TP",
-                "tableTo": "Dim_Cust",
+                "tableTo": "Dim_Customer",
                 "joinCardinality": "Many2One",
                 "joinActive": "Y",
                 "joinColumns": [{

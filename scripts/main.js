@@ -8,7 +8,7 @@ app.constant('myConfig', {
     "url": 'assets/sample/'
 });
 app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage) {
-    $scope.zoomlevel = 75;
+    $scope.zoomlevel = 55;
     $scope.pos_x = 214;
     $scope.pos_y = 148;
     if (typeof $localStorage.lastUUID === 'undefined') {
@@ -46,7 +46,7 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
             });
         },
         loadData: function() {
-            $http.get(myConfig.url + '3861.json').then(function(response) {
+            $http.get(myConfig.url + 'sample.json').then(function(response) {
                 $scope.table.list = response.data;
                 $scope.loadPlumbs();
                 console.log($scope.table.list);
