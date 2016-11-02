@@ -1,5 +1,5 @@
 angular.module('NDXHackathon').controller('popTableCtrl', ['$scope', 'tableInfo', 'uiGridConstants', function($scope, tableInfo, uiGridConstants){
-    $scope.table = tableInfo.data
+    $scope.table = tableInfo.data;
     $scope.editOptions = {
         canEdit : false
     };
