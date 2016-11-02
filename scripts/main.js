@@ -101,6 +101,21 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
     }
     $scope.table = {
         list: '',
+        addJoin: function() {
+            var popJoin = ngDialog.open({
+                template: 'views/addJoin.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'addJoinCtrl',
+                resolve: {
+                    tableList: function() {
+                        return $scope.table.list.schemaDefinition.physical.tables
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
+        },
         openPopup: function(obj, key) {
             var modal = ngDialog.open({
                 template: 'views/popupInfo.html',
@@ -247,3 +262,18 @@ app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
     console.log(data);
 }]);
+angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', function($scope, tableList) {
+    $scope.tables = tableList;
+    $scope.join = {
+        joinName: '',
+        tableFrom: '',
+        tableTo: '',
+        joinCardinality: '',
+        joinActive: '',
+        joinColumns: []
+    };
+    $scope.save = function(){
+        console.log($scope.join);
+        //$scope.closeThisDialog($scope.selectedDatabase);
+    }
+}])

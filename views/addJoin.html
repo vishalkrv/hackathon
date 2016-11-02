@@ -1,0 +1,96 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="modal-title">
+        Add Join
+    </h5>
+</div>
+<div class="modal-body" id="modal-body">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="joinName">
+                Name
+            </label>
+            <div class="col-sm-10">
+                <input class="form-control" id="joinName" ng-model="join.joinName" placeholder="Join Name" type="text">
+                </input>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="joinCardinality">
+                Cardinality
+            </label>
+            <div class="col-sm-10">
+                <input class="form-control" id="joinCardinality" ng-model="join.joinCardinality" placeholder="Join Cardinality" type="text">
+                </input>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="joinActive">
+                Active
+            </label>
+            <div class="col-sm-10">
+                <input class="form-control" id="joinActive" ng-model="join.joinActive" placeholder="Join Active" type="text">
+                </input>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="tableFrom">
+                Table From
+            </label>
+            <div class="col-sm-10">
+                <select class="form-control" id="tableFrom" name="tableFrom" ng-model="join.tableFrom">
+                    <option value="">
+                        --SELECT--
+                    </option>
+                    <option ng-repeat="table in tables" ng-value="table.tableName">
+                        {{table.tableName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="tableTo">
+                Table To
+            </label>
+            <div class="col-sm-10">
+                <select class="form-control" id="tableTo" name="tableTo" ng-model="join.tableTo">
+                    <option value="">
+                        --SELECT--
+                    </option>
+                    <option ng-repeat="table in tables" ng-value="table.tableName">
+                        {{table.tableName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="well">
+        <div class="col-md-5">
+            <select class="form-control" id="tableTo" name="tableTo" ng-model="join.tableTo">
+                <option value="">
+                    --SELECT--
+                </option>
+                <option ng-repeat="table in tables" ng-value="table.tableName">
+                    {{table.tableName}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            To
+        </div>
+        <div class="col-md-5">
+            <select class="form-control" id="tableTo" name="tableTo" ng-model="join.tableTo">
+                <option value="">
+                    --SELECT--
+                </option>
+                <option ng-repeat="table in tables" ng-value="table.tableName">
+                    {{table.tableName}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" ng-click="save()">
+        Save
+    </button>
+</div>

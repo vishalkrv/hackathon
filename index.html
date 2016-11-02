@@ -45,7 +45,7 @@
                                         <li class="file toUpper" ng-repeat="(k, v) in value">
                                             <label class="toUpper" for="{{k}}">
                                                 {{k}}
-                                                <a ng-if="k==='joins'" cls="btn btn-primary">
+                                                <a ng-if="k==='joins'" ng-click="table.addJoin()" cls="btn btn-primary">
                                                             <i aria-hidden="true" class="fa fa-plus">
                                                             </i>
                                                 </a>
