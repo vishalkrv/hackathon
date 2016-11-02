@@ -265,14 +265,25 @@ app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
 }]);
 angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', function($scope, tableList) {
     $scope.tables = tableList;
-    $scope.join = {
+    $scope.join = [{
         joinName: '',
         tableFrom: '',
         tableTo: '',
+        colFrom: '',
+        colTo: '',
         joinCardinality: '',
         joinActive: '',
         joinColumns: []
-    };
+    }, {
+        joinName: '',
+        tableFrom: '',
+        tableTo: '',
+        colFrom: '',
+        colTo: '',
+        joinCardinality: '',
+        joinActive: '',
+        joinColumns: []
+    }];
     $scope.save = function(){
         console.log($scope.join);
         //$scope.closeThisDialog($scope.selectedDatabase);
@@ -288,7 +299,24 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
     $scope.selectedToTable = function(table){
         var selTable = $scope.tables.filter(function(obj){
             return obj.tableName == table;
-        });;
+        });
         $scope.toCols = selTable[0].columns;
+    }
+
+    $scope.addNewJoin = function(table){
+        $scope.join.push({
+            joinName: '',
+            tableFrom: '',
+            tableTo: '',
+            colFrom: '',
+            colTo: '',
+            joinCardinality: '',
+            joinActive: '',
+            joinColumns: []
+        });
+    }
+
+    $scope.removeJoin = function(index){
+        $scope.join.splice(index, 1);
     }
 }])

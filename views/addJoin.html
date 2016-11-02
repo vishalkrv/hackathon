@@ -63,10 +63,9 @@
             </div>
         </div>
     </form>
-    <div class="well display-flex" >
-      <!-- ng-repeat="j in join" -->
+    <div class="well display-flex" ng-repeat="j in join track by $index" ng-mouseover="hoverRemove = true" ng-mouseleave="hoverRemove = false">
         <div class="col-md-5">
-            <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join.colFrom">
+            <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join[$index].colFrom">
                 <option value="" selected="selected">
                     --SELECT--
                 </option>
@@ -79,7 +78,7 @@
             To
         </div>
         <div class="col-md-5">
-            <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join.colTo">
+            <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join[$index].colTo">
                 <option value="" selected="selected">
                     --SELECT--
                 </option>
@@ -88,9 +87,13 @@
                 </option>
             </select>
         </div>
+        <i class="glyphicon glyphicon-remove-circle text-danger remove-join" ng-if="hoverRemove" ng-click="removeJoin($index)"></i>
     </div>
 </div>
 <div class="modal-footer">
+    <button class="btn btn-primay" ng-click="addNewJoin()">
+        New Join
+    </button>
     <button class="btn btn-success" ng-click="save()">
         Save
     </button>

@@ -296,3 +296,11 @@ body {
 .display-flex{
   display: flex;
 }
+
+.remove-join{
+  font-size: 20px;
+  position: relative;
+  top: -20px;
+  cursor: pointer;
+  right: -20px;
+}
