@@ -63,9 +63,10 @@
             </div>
         </div>
     </form>
-    <div class="well display-flex">
+    <div class="well display-flex" >
+      <!-- ng-repeat="j in join" -->
         <div class="col-md-5">
-            <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join.tableTo">
+            <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join.colFrom">
                 <option value="" selected="selected">
                     --SELECT--
                 </option>
@@ -78,7 +79,7 @@
             To
         </div>
         <div class="col-md-5">
-            <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join.tableTo">
+            <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join.colTo">
                 <option value="" selected="selected">
                     --SELECT--
                 </option>
