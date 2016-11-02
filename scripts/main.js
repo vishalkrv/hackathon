@@ -127,6 +127,7 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
             });
             popTable.closePromise.then(function(data) {
                 $scope.table.list.schemaDefinition.physical.tables.push(data.value);
+                $scope.table.tableObjects.push(data.value);
             });
         },
         //Not using this
