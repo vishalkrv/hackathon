@@ -1,4 +1,4 @@
-var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage','ui.grid']);
+var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage','ui.grid', 'ui.grid.edit']);
 jsPlumb.ready(function() {
     angular.element(document).ready(function() {
         angular.bootstrap(document, ['NDXHackathon']);
@@ -73,11 +73,21 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         // Maps evevry table with the other table based on the JOINS mapped in INPUT json
         angular.forEach($scope.table.list.schemaDefinition.physical.joins, function(val, idx) {
             var matchedFromTable = $scope.table.tableObjects.filter(function(joinObj) {
-                return (val.tableFrom === joinObj.tableName);
+                if(val.joinActive === 'Y'){
+                    return (val.tableFrom === joinObj.tableName);
+                }
             });
             var matchedToTable = $scope.table.tableObjects.filter(function(joinObj) {
-                return (val.tableTo === joinObj.tableName);
+                // var foundColumn = joinObj.columns.filter(function(colObj) {
+                //     return (val.joinColumns[0].columnTo === colObj.columnName)
+                // });
+                return (val.tableTo === joinObj.tableName) //&& foundColumn.length > 0;
             });
+            // var matchedToTable = $scope.table.tableObjects.filter(function(joinObj) {
+            //     if(val.joinActive === 'Y'){
+            //         return (val.joinColumns[0].columnTo === joinObj.joinColumns[0].columnFrom);
+            //     }
+            // });
             if (matchedFromTable.length > 0) {
                 var conn = {
                     uuid: matchedToTable[0].targets[0].uuid
@@ -134,7 +144,7 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         },
         //openTablePopup
         openTableDetails: function(index) {
-            var data = this.list.schemaDefinition.physical.tables[index]
+            var data = this.tableObjects[index]
             var tModal = ngDialog.open({
                 template: 'views/tableDetails.html',
                 className: 'ngdialog-theme-default bigPopup',
@@ -242,25 +252,50 @@ app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     console.log(data)
 }]);
 
-app.controller('popTableCtrl', ['$scope', 'tableInfo', function($scope, tableInfo){
-    $scope.table = tableInfo.data;
+app.controller('popTableCtrl', ['$scope', 'tableInfo', 'uiGridConstants', function($scope, tableInfo, uiGridConstants){
+    $scope.table = tableInfo.data
+    $scope.editOptions = {
+        canEdit : false
+    };
+    $scope.editable = function () {
+        return $scope.editOptions.canEdit;
+    };
+    $scope.edit = function(){
+        $scope.editOptions.canEdit = true;
+        $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+    }
+    $scope.addNewRow = function(){
+        $scope.table.columns.push({
+            "columnName": "",
+            "columnHeader": "",
+            "columnDataType": "",
+            "columnIsKey": ""
+        });
+    };
     $scope.gridOptions = {
         data:$scope.table.columns,
         columnDefs: [{
-            field: 'columnName',
-            displayName: 'Name'
+            name: 'columnName',
+            displayName: 'Name',
+            cellEditableCondition: $scope.editable
         },{
-            field: 'columnIsKey',
-            displayName: 'Is Key'
+            name: 'columnIsKey',
+            displayName: 'Is Key',
+            cellEditableCondition: $scope.editable
         },{
-            field: 'columnHeader',
-            displayName: 'Header'
+            name: 'columnHeader',
+            displayName: 'Header',
+            cellEditableCondition: $scope.editable
         }, {
-            field: 'columnDataType',
+            name: 'columnDataType',
             displayName: 'Data Type',
+            cellEditableCondition: $scope.editable
         }],
         enableRowSelection: true,
         enableRowHeaderSelection: true,
-        multiSelect: false
+        multiSelect: false,
+        onRegisterApi: function( gridApi ) {
+            $scope.gridApi = gridApi;
+        }
     };
 }])
