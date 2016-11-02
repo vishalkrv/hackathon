@@ -1,4 +1,4 @@
-var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage','ui.grid', 'ui.grid.edit']);
+var app = angular.module('NDXHackathon', ['NDXHackathon.directives', 'ui.bootstrap', 'ngAnimate', 'ngDialog', 'angularTreeview', 'ngStorage', 'ui.grid', 'ui.grid.edit']);
 jsPlumb.ready(function() {
     angular.element(document).ready(function() {
         angular.bootstrap(document, ['NDXHackathon']);
@@ -73,7 +73,7 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         // Maps evevry table with the other table based on the JOINS mapped in INPUT json
         angular.forEach($scope.table.list.schemaDefinition.physical.joins, function(val, idx) {
             var matchedFromTable = $scope.table.tableObjects.filter(function(joinObj) {
-                if(val.joinActive === 'Y'){
+                if (val.joinActive === 'Y') {
                     return (val.tableFrom === joinObj.tableName);
                 }
             });
@@ -119,18 +119,14 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 console.log(data);
             });
         },
-        add: function() {
-            this.list.physical.tables.push({
-                tableName: 'DummyTable',
-                tableQuery: 'Random Query',
-                tableSource: 'SQL',
-                tableType: 'query',
-                columns: [{
-                    columnName: 'Name1',
-                    columnDataType: 'string',
-                    columnHeader: 'Header_Name',
-                    columnIsKey: 'Y',
-                }]
+        addTable: function() {
+            var popTable = ngDialog.open({
+                template: 'views/addTable.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'addTableCtrl'
+            });
+            popTable.closePromise.then(function(data) {
+                $scope.table.list.schemaDefinition.physical.tables.push(data.value);
             });
         },
         //Not using this
@@ -249,5 +245,57 @@ app.controller('popupCtrl', ['$scope', 'database', function($scope, database) {
 }]);
 app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
-    console.log(data)
+    console.log(data);
+}]);
+angular.module('NDXHackathon').controller('addTableCtrl', ['$scope', function($scope) {
+    $scope.table = {
+        tableName:'',
+        tableSource:'',
+        tableType:'',
+        tableQuery:''
+    };
+    $scope.gridOptions = {
+        data: [],
+        columnDefs: [{
+            name: 'columnName',
+            displayName: 'Name',
+            cellEditableCondition: true
+        }, {
+            name: 'columnIsKey',
+            displayName: 'Is Key',
+            cellEditableCondition: true
+        }, {
+            name: 'columnHeader',
+            displayName: 'Header',
+            cellEditableCondition: true
+        }, {
+            name: 'columnDataType',
+            displayName: 'Data Type',
+            cellEditableCondition: true
+        }, {
+            name: 'delete',
+            displayName: '',
+            cellEditableCondition: false,
+            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
+        }],
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        multiSelect: false,
+        onRegisterApi: function(gridApi) {
+            $scope.gridApi = gridApi;
+        }
+    };
+    $scope.addCol = function() {
+        $scope.gridOptions.data.push({
+            "columnName": "",
+            "columnHeader": "",
+            "columnDataType": "string",
+            "columnIsKey": "N"
+        });
+    };
+    $scope.addCol();
+    $scope.save = function() {
+        $scope.table.columns = $scope.gridOptions.data;
+        $scope.closeThisDialog($scope.table);
+    };
 }]);
