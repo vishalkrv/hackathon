@@ -7,7 +7,7 @@ jsPlumb.ready(function() {
 app.constant('myConfig', {
     "url": 'assets/sample/'
 });
-app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage) {
+app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage, $interval) {
     $scope.zoomlevel = 55;
     $scope.pos_x = 214;
     $scope.pos_y = 148;
@@ -28,6 +28,40 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         },
         list: ''
     };
+
+    $scope.loaderMessage = '';
+    $scope.loader = function(){
+        var timer = 0;
+        $interval.cancel(timer);
+        var value = 0;
+        timer = $interval(function(){
+            value++;
+            if (value == 20) {
+                 $scope.loaderMessage = "Analysing Configuration";
+            } else if(value == 40){
+                 $scope.loaderMessage = "Analysing Sources";
+            } else if(value == 60){
+                 $scope.loaderMessage = "Analysing Tables";
+            } else if(value == 80){
+                 $scope.loaderMessage = "Analysing Joins";
+            } else if(value == 100){
+                 $scope.loaderMessage = "Analysing Dimensions";
+            } else if(value == 120){
+                 $scope.loaderMessage = "Analysing Facts";
+            } else if(value == 140){
+                 $scope.loaderMessage = "Loading...";
+            } else if(value == 160){
+                 $scope.loaderMessage = "Loading JSON";
+            } else if(value == 170){
+                 $scope.loaderMessage = "Ready";
+            } else if (value == 180) {
+                 $interval.cancel(timer);
+                 $scope.loaderMessage = false;
+            }
+        }, 100);
+    };
+    $scope.loader();
+
     database.load();
     var popup = {
         open: function() {
@@ -412,7 +446,7 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
 
 app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimension', 'uiGridConstants', function($scope, dimensionsList, currentDimension, uiGridConstants) {
     $scope.dimensionsList = dimensionsList;
-    $scope.currentDimension = currentDimension;
+    $scope.currentc = currentDimension;
     $scope.dimension = {
         "dimensionName": "",
         "dimensionTemplate": "",
