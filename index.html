@@ -105,6 +105,44 @@
                                                     </ol>
                                                 </li>
                                             </ol>
+                                            <ol ng-if="k =='dimensions'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label for="{{item.dimensionName}}">
+                                                        {{item.dimensionName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openDimensionNameDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.dimensionName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li ng-repeat="da in item.attributes">
+                                                            <span>
+                                                                {{da.attributeTable}} - {{da.attributeName}} - {{da.attributeNameColumn}}
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                            <ol ng-if="k =='facts'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label for="{{item.factName}}">
+                                                        {{item.factName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openFactNameDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.factName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li ng-repeat="fk in item.keys">
+                                                            <span>
+                                                                {{fk.keyDimension}} - {{fk.keyAttribute}}
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
                                         </li>
                                     </ol>
                                 </li>
