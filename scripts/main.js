@@ -62,6 +62,14 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
             }
         }
     }
+
+    $scope.jsonview = {
+        json: false
+    }
+    $scope.showJson = function(){
+        $scope.jsonview.json = !$scope.jsonview.json;
+    }
+
     $scope.loadPlumbs = function() {
         // Adds all the tables to the CANVAS
         angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx) {

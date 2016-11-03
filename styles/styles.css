@@ -84,6 +84,13 @@ body {
     height:100%;
 }
 
+.jsonArea {
+    background: #fff;
+    overflow:auto;
+    height:100%;
+    padding: 0;
+}
+
 
 /* TreeNode */
 

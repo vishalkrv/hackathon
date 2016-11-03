@@ -22,6 +22,9 @@
                         NDX Hackathon
                     </a>
                 </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a ng-click="showJson()">{{!jsonview.json ? 'JSON' : 'CANVAS'}}</a></li>
+                </ul>
             </div>
         </nav>
         <div class="container-fluid">
@@ -148,11 +151,14 @@
                                 </li>
                             </ol>
                         </div>
-                        <div class="col-md-8 dropArea">
+                        <div class="col-md-8 dropArea" ng-show='!jsonview.json'>
                             <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
                                 <ng-include ng-repeat="state in table.tableObjects track by $index" src="'views/qTable.html'">
                                 </ng-include>
                             </js-plumb-canvas>
+                        </div>
+                        <div class="col-md-8 jsonArea" ng-show="jsonview.json">
+                          <pre>{{table.list.schemaDefinition | json}}</pre>
                         </div>
                     </div>
                 </div>
