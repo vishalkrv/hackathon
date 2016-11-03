@@ -1,7 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title" id="modal-title">
         Add Fact
-        <i class="glyphicon glyphicon-plus-sign pull-right" ng-click="addNewRow()" style="cursor: pointer" ng-if="currentFact"></i>
     </h5>
 </div>
 <div class="modal-body" id="modal-body">
@@ -16,9 +15,38 @@
             </div>
             <br/>
             <br/>
-            <div ui-grid="gridOptions" ui-grid-edit class="grid" ng-if="currentFact"></div>
         </div>
     </form>
+    <div class="row">
+        <h5>
+            Keys
+            <i class="glyphicon glyphicon-plus-sign" ng-click="addNewRow()" style="cursor: pointer">
+            </i>
+        </h5>
+        <div class="grid" style="height: 250px" ui-grid="gridOptions" ui-grid-edit="">
+        </div>
+    </div>
+    <div class="row">
+        <h5>
+            Measure
+            <i class="glyphicon glyphicon-plus-sign" ng-click="addM()" style="cursor: pointer">
+            </i>
+        </h5>
+        <div class="col-md-12">            
+            <form class="form-horizontal well" ng-repeat="me in fact.measures">
+            <a class="btn btn-default pull-right" ng-click="removeM($index)"><i class="fa fa-ban"></i></a>
+                <div class="form-group" ng-repeat="(key, value) in me">
+                    <label class="col-sm-3 control-label" for="{{key}}">
+                        {{key}}
+                    </label>
+                    <div class="col-sm-7">
+                        <input class="form-control" id="{{key}}" ng-model="me[key]" type="text">
+                        </input>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-success" ng-click="save()">

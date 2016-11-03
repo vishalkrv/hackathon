@@ -69,7 +69,7 @@
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
-                                                <a cls="btn btn-primary" ng-click="table.addFacts()" ng-if="k =='facts'">
+                                                <a cls="btn btn-primary" ng-click="table.openFactDetails()" ng-if="k =='facts'">
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
@@ -184,10 +184,31 @@
                                                     </label>
                                                     <input id="{{item.factName}}" type="checkbox"/>
                                                     <ol>
-                                                        <li ng-repeat="fk in item.keys">
-                                                            <span>
-                                                                {{fk.keyDimension}} - {{fk.keyAttribute}}
-                                                            </span>
+                                                        <li class="file toUpper">
+                                                            <label for="keys">
+                                                                Keys
+                                                            </label>
+                                                            <input id="keys" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="key in item.keys">
+                                                                    <span>
+                                                                        {{key.keyDimension}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                        <li class="file toUpper">
+                                                            <label for="measures">
+                                                                Measures
+                                                            </label>
+                                                            <input id="measures" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="measure in item.measures">
+                                                                    <span>
+                                                                        {{measure.measureName}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
                                                         </li>
                                                     </ol>
                                                 </li>

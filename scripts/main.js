@@ -64,6 +64,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
     var popup = {
         open: function() {
             var modal = ngDialog.open({
+                closeByEscape: false,
+                closeByDocument: false,
                 template: 'views/modalContent.html',
                 className: 'ngdialog-theme-default',
                 controller: 'popupCtrl',
@@ -141,6 +143,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         list: '',
         addJoin: function() {
             var popJoin = ngDialog.open({
+                closeByEscape: false,
+                closeByDocument: false,
                 template: 'views/addJoin.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'addJoinCtrl',
@@ -165,6 +169,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/popupInfo.html',
                 className: 'ngdialog-theme-default',
                 controller: 'popupInfoCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     data: function() {
                         return {
@@ -180,6 +186,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         },
         addTable: function() {
             var popTable = ngDialog.open({
+                closeByEscape: false,
+                closeByDocument: false,
                 template: 'views/addTable.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'addTableCtrl'
@@ -205,6 +213,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/tableDetails.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'popTableCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     tableInfo: function() {
                         return {
@@ -251,6 +261,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/addDimension.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'addDimensionsCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     dimensionsList: function() {
                         return $scope.table.list.schemaDefinition.logical.dimensions
@@ -269,6 +281,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/addFact.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'factsCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     factsList: function() {
                         return $scope.table.list.schemaDefinition.logical.facts
@@ -287,6 +301,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/addDimension.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'addDimensionsCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     dimensionsList: function() {
                         return $scope.table.list.schemaDefinition.logical.dimensions
@@ -305,6 +321,8 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 template: 'views/addFact.html',
                 className: 'ngdialog-theme-default bigPopup',
                 controller: 'factsCtrl',
+                closeByEscape: false,
+                closeByDocument: false,
                 resolve: {
                     factsList: function() {
                         return $scope.table.list.schemaDefinition.logical.facts
@@ -467,9 +485,9 @@ app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimensi
             }]
         });
     };
-    $scope.removeH = function(index){
-        $scope.dimension.hierarchies.splice(index,1);
-    }
+    $scope.removeH = function(index) {
+        $scope.dimension.hierarchies.splice(index, 1);
+    };
     $scope.addLevel = function(parent, index) {
         $scope.dimension.hierarchies[parent].levels.push({
             "levelAttribute": ""
@@ -539,84 +557,45 @@ app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimensi
 app.controller('factsCtrl', ['$scope', 'factsList', 'currentFact', 'uiGridConstants', function($scope, factsList, currentFact, uiGridConstants) {
     $scope.factsList = factsList;
     $scope.currentFact = currentFact;
+    $scope.removeM = function(index) {
+        $scope.fact.measures.splice(index, 1);
+    };
+    $scope.addM = function() {
+        $scope.fact.measures.push({
+            "measureName": "",
+            "measureColumn": "",
+            "measureFormat": "",
+            "measureAggregation": "",
+            "measurePolarity": "",
+            "measureClass": ""
+        });
+    }
     $scope.fact = {
         "factName": "",
         "factTemplate": "",
         "factTable": "",
         "keys": [{
-            "keyDimension": "Time",
-            "keyAttribute": "Week",
-            "keyRole": "none",
+            "keyDimension": "",
+            "keyAttribute": "",
+            "keyRole": "",
             "keyColumns": {
-                "keyColumn": "Week_Id"
-            }
-        }, {
-            "keyDimension": "Product",
-            "keyAttribute": "UPC",
-            "keyRole": "none",
-            "keyColumns": {
-                "keyColumn": "UPC_Id"
-            }
-        }, {
-            "keyDimension": "Customer",
-            "keyAttribute": "Store",
-            "keyRole": "none",
-            "keyColumns": {
-                "keyColumn": "Store_Id"
+                "keyColumn": ""
             }
         }],
         "measures": [{
-            "measureName": "Shipped Quantity",
-            "measureColumn": "Ship_Qty",
-            "measureFormat": "#,#",
-            "measureAggregation": "sum",
-            "measurePolarity": "positive",
-            "measureClass": "vol",
-            "measureLocalizations": {
-                "measureLocalization": {
-                    "attributeLanguage": "German",
-                    "attributeLocal": "Zeit"
-                }
-            }
-        }, {
-            "measureName": "Shipped Value",
-            "measureColumn": "Ship_Val",
-            "measureFormat": "$#,#.00",
-            "measureAggregation": "sum",
-            "measurePolarity": "positive",
-            "measureClass": "fin"
-        }],
-        "aggregates": [{
-            "aggregateTableName": "Fact_Ship_by_Ret_Yr",
-            "aggregateKeys": [{
-                "aggregateKeyDimension": "Time",
-                "aggregateKeyAttribute": "Year",
-                "aggregateKeyRole": "none",
-                "aggregateKeyColumns": {
-                    "keyColumn": "Year_Id"
-                }
-            }, {
-                "aggregateKeyDimension": "Product",
-                "aggregateKeyAttribute": "UPC",
-                "aggregateKeyRole": "none",
-                "aggregateKeyColumns": {
-                    "keyColumn": "UPC_Id"
-                }
-            }, {
-                "aggregateKeyDimension": "Customer",
-                "aggregateKeyAttribute": "Retailer",
-                "aggregateKeyRole": "none",
-                "aggregateKeyColumns": {
-                    "keyColumn": "Retailer_Id"
-                }
-            }]
+            "measureName": "",
+            "measureColumn": "",
+            "measureFormat": "",
+            "measureAggregation": "",
+            "measurePolarity": "",
+            "measureClass": "",
         }]
     };
     if ($scope.currentFact) {
         $scope.fact = currentFact;
     }
     $scope.save = function() {
-        if (!$scope.currentFact) {
+        if (!$scope.currentFact && $scope.fact.factName !== '') {
             $scope.factsList.push($scope.fact);
         }
         $scope.closeThisDialog();
