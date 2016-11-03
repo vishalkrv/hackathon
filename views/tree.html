@@ -1,0 +1,170 @@
+<ol class="tree">
+                                <li ng-repeat="(key, value) in table.list.schemaDefinition">
+                                    <label class="toUpper" for="{{key}}">
+                                        {{key}}
+                                    </label>
+                                    <input checked="" id="{key}" type="checkbox"/>
+                                    <ol>
+                                        <li class="file toUpper" ng-repeat="(k, v) in value">
+                                            <label class="toUpper" for="{{k}}">
+                                                {{k}}
+                                                <a cls="btn btn-primary" ng-click="table.addJoin()" ng-if="k==='joins'">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a cls="btn btn-primary" ng-click="table.addTable()" ng-if="k==='tables'">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a cls="btn btn-primary" ng-click="table.openDimensionDetails()" ng-if="k =='dimensions'">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a cls="btn btn-primary" ng-click="table.openFactDetails()" ng-if="k =='facts'">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a cls="btn btn-primary" ng-click="table.openPopup(value, k)">
+                                                    <i aria-hidden="true" class="fa fa-external-link">
+                                                    </i>
+                                                </a>
+                                            </label>
+                                            <input checked="" id="{{k}}" type="checkbox"/>
+                                            <ol ng-if="k =='tables'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label class="toUpper" for="{{item.tableName}}">
+                                                        {{item.tableName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openTableDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                        <a cls="btn btn-primary" ng-click="table.removeTable($index)">
+                                                            <i aria-hidden="true" class="glyphicon glyphicon-remove-circle text-danger">
+                                                            </i>
+                                                        </a>
+                                                        <a cls="btn btn-primary" ng-click="table.addToCanvas($index)">
+                                                            <i aria-hidden="true" class="fa fa-arrow-right">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.tableName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li ng-repeat="col in item.columns">
+                                                            <span>
+                                                                {{col.columnName}}
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                            <ol ng-if="k =='joins'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label for="{{item.joinName}}">
+                                                        {{item.joinName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openJoinDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.joinName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li ng-repeat="join in item.joinColumns">
+                                                            <span>
+                                                                {{item.tableFrom}}.{{join.columnFrom}} - {{item.tableTo}}.{{join.columnTo}}
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                            <ol ng-if="k =='dimensions'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label for="{{item.dimensionName}}">
+                                                        {{item.dimensionName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openDimensionDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.dimensionName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li class="file toUpper">
+                                                            <label for="atributes">
+                                                                Attributes
+                                                            </label>
+                                                            <input id="attributes" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="attr in item.attributes">
+                                                                    <span>
+                                                                        {{attr.attributeName}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                        <li class="file toUpper">
+                                                            <label for="hierarchies">
+                                                                Hierarchies
+                                                            </label>
+                                                            <input id="hierarchies" type="checkbox"/>
+                                                            <ol>
+                                                                <li class="file toUpper" ng-repeat="attr in item.hierarchies">
+                                                                    <label for="hierarchies">
+                                                                        {{attr.hierarchyName}}
+                                                                    </label>
+                                                                    <input id="hierarchies" type="checkbox"/>
+                                                                    <ol>
+                                                                        <li ng-repeat="level in attr.levels">
+                                                                            <span>
+                                                                                {{level.levelAttribute}}
+                                                                            </span>
+                                                                        </li>
+                                                                    </ol>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                            <ol ng-if="k =='facts'">
+                                                <li class="file toUpper" ng-repeat="item in v">
+                                                    <label for="{{item.factName}}">
+                                                        {{item.factName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openFactDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
+                                                    </label>
+                                                    <input id="{{item.factName}}" type="checkbox"/>
+                                                    <ol>
+                                                        <li class="file toUpper">
+                                                            <label for="keys">
+                                                                Keys
+                                                            </label>
+                                                            <input id="keys" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="key in item.keys">
+                                                                    <span>
+                                                                        {{key.keyDimension}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                        <li class="file toUpper">
+                                                            <label for="measures">
+                                                                Measures
+                                                            </label>
+                                                            <input id="measures" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="measure in item.measures">
+                                                                    <span>
+                                                                        {{measure.measureName}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
