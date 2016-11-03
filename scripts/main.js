@@ -4,10 +4,13 @@ jsPlumb.ready(function() {
         angular.bootstrap(document, ['NDXHackathon']);
     });
 });
+angular.module('NDXHackathon').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.timeout = 5000;
+}]);
 app.constant('myConfig', {
     "url": 'assets/sample/'
 });
-app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage, $interval) {
+angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage, $interval) {
     $scope.zoomlevel = 55;
     $scope.pos_x = 214;
     $scope.pos_y = 148;
@@ -393,249 +396,14 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
         });
     };
 });
-app.controller('popupCtrl', ['$scope', 'database', function($scope, database) {
+angular.module('NDXHackathon').controller('popupCtrl', ['$scope', 'database', function($scope, database) {
     $scope.databaseList = database;
     $scope.save = function() {
         $scope.closeThisDialog($scope.selectedDatabase);
     };
 }]);
-app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
+angular.module('NDXHackathon').controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
     console.log(data);
 }]);
-angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', 'joinsList', 'currentJoin', function($scope, tableList, joinsList, currentJoin) {
-    $scope.tables = tableList;
-    $scope.currentJoin = currentJoin;
-    $scope.join = {
-        "joinName": "",
-        "tableFrom": "",
-        "tableTo": "",
-        "joinCardinality": "",
-        "joinActive": "",
-        "joinColumns": [{
-            "columnFrom": "",
-            "columnTo": ""
-        }]
-    };
-    $scope.save = function() {
-        console.log($scope.join);
-        joinsList.push($scope.join);
-        $scope.closeThisDialog();
-    }
-    $scope.selectedFromTable = function(table) {
-        var selTable = $scope.tables.filter(function(obj) {
-            return obj.tableName == table;
-        });
-        $scope.fromCols = selTable[0].columns;
-    }
-    $scope.selectedToTable = function(table) {
-        var selTable = $scope.tables.filter(function(obj) {
-            return obj.tableName == table;
-        });
-        $scope.toCols = selTable[0].columns;
-    }
-    if (currentJoin) {
-        $scope.join = currentJoin;
-        $scope.selectedFromTable($scope.join.tableFrom);
-        $scope.selectedToTable($scope.join.tableTo);
-    }
-    $scope.addNewJoin = function() {
-        $scope.join.joinColumns.push({
-            "columnFrom": "",
-            "columnTo": ""
-        });
-    }
-    $scope.removeJoin = function(index) {
-        $scope.join.joinColumns.splice(index, 1);
-    }
-}]);
-app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimension', 'uiGridConstants', function($scope, dimensionsList, currentDimension, uiGridConstants) {
-    $scope.dimensionsList = dimensionsList;
-    $scope.currentDimension = currentDimension;
-    $scope.dimension = {
-        "dimensionName": "",
-        "dimensionTemplate": "",
-        "attributes": [{
-            "attributeName": "",
-            "attributeTemplate": "",
-            "attributeTable": "",
-            "attributeNameColumn": "",
-            "attributeSortColumn": "",
-            "attributeFormat": "none",
-            "attributeParents": [{
-                "attrbiuteParent": ""
-            }],
-            "attributeKeyColumns": [{
-                "attrbiuteKeyTable": "",
-                "attrbiuteKeyColumn": ""
-            }]
-        }],
-        "hierarchies": [{
-            "hierarchyName": "",
-            "levels": [{
-                "levelAttribute": ""
-            }]
-        }]
-    };
-    $scope.addH = function() {
-        $scope.dimension.hierarchies.push({
-            "hierarchyName": "",
-            "levels": [{
-                "levelAttribute": ""
-            }]
-        });
-    };
-    $scope.removeH = function(index) {
-        $scope.dimension.hierarchies.splice(index, 1);
-    };
-    $scope.addLevel = function(parent, index) {
-        $scope.dimension.hierarchies[parent].levels.push({
-            "levelAttribute": ""
-        });
-    };
-    $scope.removeLevel = function(parent, index) {
-        $scope.dimension.hierarchies[parent].levels.splice(index, 1);
-    };
-    if ($scope.currentDimension) {
-        $scope.dimension = currentDimension;
-    }
-    $scope.save = function() {
-        if (!$scope.currentDimension && $scope.dimension.dimensionName) {
-            $scope.dimensionsList.push($scope.dimension);
-        }
-        $scope.closeThisDialog();
-    }
-    $scope.addNewRow = function() {
-        $scope.gridOptions.data.push({
-            "attributeName": "",
-            "attributeTemplate": "",
-            "attributeTable": "",
-            "attributeNameColumn": "",
-            "attributeSortColumn": ""
-        });
-    };
-    $scope.deleteRow = function(row) {
-        var index = $scope.gridOptions.data.indexOf(row.entity);
-        $scope.gridOptions.data.splice(index, 1);
-    };
-    $scope.gridOptions = {
-        data: $scope.dimension.attributes,
-        columnDefs: [{
-            name: 'attributeName',
-            displayName: 'Name',
-            cellEditableCondition: true
-        }, {
-            name: 'attributeTemplate',
-            displayName: 'Template Name',
-            cellEditableCondition: true
-        }, {
-            name: 'attributeTable',
-            displayName: 'Table',
-            cellEditableCondition: true
-        }, {
-            name: 'attributeNameColumn',
-            displayName: 'Column Name',
-            cellEditableCondition: true
-        }, {
-            name: 'attributeSortColumn',
-            displayName: 'Sort Column Name',
-            cellEditableCondition: true
-        }, {
-            name: 'delete',
-            displayName: '',
-            cellEditableCondition: false,
-            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
-        }],
-        enableRowSelection: true,
-        enableRowHeaderSelection: true,
-        multiSelect: false,
-        onRegisterApi: function(gridApi) {
-            $scope.gridApi = gridApi;
-        }
-    };
-}]);
-app.controller('factsCtrl', ['$scope', 'factsList', 'currentFact', 'uiGridConstants', function($scope, factsList, currentFact, uiGridConstants) {
-    $scope.factsList = factsList;
-    $scope.currentFact = currentFact;
-    $scope.removeM = function(index) {
-        $scope.fact.measures.splice(index, 1);
-    };
-    $scope.addM = function() {
-        $scope.fact.measures.push({
-            "measureName": "",
-            "measureColumn": "",
-            "measureFormat": "",
-            "measureAggregation": "",
-            "measurePolarity": "",
-            "measureClass": ""
-        });
-    }
-    $scope.fact = {
-        "factName": "",
-        "factTemplate": "",
-        "factTable": "",
-        "keys": [{
-            "keyDimension": "",
-            "keyAttribute": "",
-            "keyRole": "",
-            "keyColumns": {
-                "keyColumn": ""
-            }
-        }],
-        "measures": [{
-            "measureName": "",
-            "measureColumn": "",
-            "measureFormat": "",
-            "measureAggregation": "",
-            "measurePolarity": "",
-            "measureClass": "",
-        }]
-    };
-    if ($scope.currentFact) {
-        $scope.fact = currentFact;
-    }
-    $scope.save = function() {
-        if (!$scope.currentFact && $scope.fact.factName !== '') {
-            $scope.factsList.push($scope.fact);
-        }
-        $scope.closeThisDialog();
-    }
-    $scope.addNewRow = function() {
-        $scope.gridOptions.data.push({
-            "keyDimension": "",
-            "keyAttribute": "",
-            "keyRole": ""
-        });
-    };
-    $scope.deleteRow = function(row) {
-        var index = $scope.gridOptions.data.indexOf(row.entity);
-        $scope.gridOptions.data.splice(index, 1);
-    };
-    $scope.gridOptions = {
-        data: $scope.fact.keys,
-        columnDefs: [{
-            name: 'keyDimension',
-            displayName: 'Key Dimension',
-            cellEditableCondition: true
-        }, {
-            name: 'keyAttribute',
-            displayName: 'Key Attribute',
-            cellEditableCondition: true
-        }, {
-            name: 'keyRole',
-            displayName: 'Key Role',
-            cellEditableCondition: true
-        }, {
-            name: 'delete',
-            displayName: '',
-            cellEditableCondition: false,
-            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
-        }],
-        enableRowSelection: true,
-        enableRowHeaderSelection: true,
-        multiSelect: false,
-        onRegisterApi: function(gridApi) {
-            $scope.gridApi = gridApi;
-        }
-    };
-}]);
+
