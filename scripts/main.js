@@ -112,6 +112,9 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                     },
                     joinsList: function(){
                         return $scope.table.list.schemaDefinition.physical.joins
+                    },
+                    currentJoin: function(){
+                        return undefined;
                     }
                 }
             });
@@ -200,8 +203,32 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
             this.tableObjects.splice($index, 1);
         },
         removeTable: function(index){
-            $scope.table.tableObjects.splice(index, 1);
-            $scope.table.list.schemaDefinition.physical.tables.splice(index, 1);
+            if (confirm("Are you sure, you want to delete '"+ $scope.table.tableObjects[index].tableName +"' table?")) {
+                $scope.table.tableObjects.splice(index, 1);
+                $scope.table.list.schemaDefinition.physical.tables.splice(index, 1);
+            }
+        },
+        //openJoinDetails
+        openJoinDetails: function(index) {
+            var popJoin = ngDialog.open({
+                template: 'views/addJoin.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'addJoinCtrl',
+                resolve: {
+                    tableList: function() {
+                        return $scope.table.list.schemaDefinition.physical.tables
+                    },
+                    joinsList: function(){
+                        return $scope.table.list.schemaDefinition.physical.joins
+                    },
+                    currentJoin: function(){
+                        return $scope.table.list.schemaDefinition.physical.joins[index]
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
         }
     };
     /**
@@ -266,12 +293,15 @@ app.controller('popupCtrl', ['$scope', 'database', function($scope, database) {
         $scope.closeThisDialog($scope.selectedDatabase);
     };
 }]);
+
 app.controller('popupInfoCtrl', ['$scope', 'data', function($scope, data) {
     $scope.data = data;
     console.log(data);
 }]);
-angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', 'joinsList', function($scope, tableList, joinsList) {
+
+angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList', 'joinsList', 'currentJoin', function($scope, tableList, joinsList, currentJoin) {
     $scope.tables = tableList;
+    $scope.currentJoin = currentJoin;
     $scope.join = {
         "joinName": "",
         "tableFrom": "",
@@ -283,6 +313,7 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
             "columnTo": ""
         }]
     };
+
     $scope.save = function(){
         console.log($scope.join);
         joinsList.push($scope.join);
@@ -301,6 +332,12 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
             return obj.tableName == table;
         });
         $scope.toCols = selTable[0].columns;
+    }
+
+    if(currentJoin){
+       $scope.join = currentJoin;
+       $scope.selectedFromTable($scope.join.tableFrom);
+       $scope.selectedToTable($scope.join.tableTo);
     }
 
     $scope.addNewJoin = function(){

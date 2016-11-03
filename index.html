@@ -90,6 +90,10 @@
                                                 <li class="file toUpper" ng-repeat="item in v">
                                                     <label for="{{item.joinName}}">
                                                         {{item.joinName}}
+                                                        <a cls="btn btn-primary" ng-click="table.openJoinDetails($index)">
+                                                            <i aria-hidden="true" class="fa fa-external-link">
+                                                            </i>
+                                                        </a>
                                                     </label>
                                                     <input id="{{item.joinName}}" type="checkbox"/>
                                                     <ol>
