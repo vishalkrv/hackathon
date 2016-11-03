@@ -1,7 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title" id="modal-title">
         Add Dimension
-        <i class="glyphicon glyphicon-plus-sign pull-right" ng-click="addNewRow()" style="cursor: pointer" ng-if="currentDimension"></i>
     </h5>
 </div>
 <div class="modal-body" id="modal-body">
@@ -14,11 +13,51 @@
                 <input class="form-control" id="dimensionName" ng-model="dimension.dimensionName" placeholder="Dimension Name" type="text">
                 </input>
             </div>
-            <br/>
-            <br/>
-            <div ui-grid="gridOptions" ui-grid-edit class="grid" ng-if="currentDimension"></div>
         </div>
     </form>
+    <div class="row">
+        <h5>
+            Attributes
+            <i class="glyphicon glyphicon-plus-sign" ng-click="addNewRow()" style="cursor: pointer">
+            </i>
+        </h5>
+        <div class="grid" style="height: 250px" ui-grid="gridOptions" ui-grid-edit="">
+        </div>
+    </div>
+    <div class="row">
+        <h5>
+            Hierachies
+            <i class="glyphicon glyphicon-plus-sign" ng-click="addH()" style="cursor: pointer">
+            </i>
+        </h5>
+        <div class="col-md-12">            
+            <form class="form-horizontal well" ng-repeat="hi in dimension.hierarchies">
+            <a class="btn btn-default pull-right" ng-click="removeH($index)"><i class="fa fa-ban"></i></a>
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label" for="hierarchyName">
+                        Hierarchy Name
+                    </label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="hierarchyName" ng-model="hi.hierarchyName" placeholder="Hierarchy Name" type="text">
+                        </input>
+                    </div>
+                </div>
+                <div class="form-group" ng-repeat="lev in hi.levels">
+                    <label class="col-md-2 control-label" for="levelAttribute">
+                        Level Attribute
+                    </label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="levelAttribute" ng-model="lev.levelAttribute" placeholder="Level Attribute" type="text">
+                        </input>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-default" ng-click="addLevel($parent.$index, $index)"><i class="glyphicon glyphicon-plus-sign"></i></button>
+                        <button class="btn btn-default" ng-disabled="$index === 0" ng-click="removeLevel($parent.$index, $index)"><i class="glyphicon glyphicon-minus-sign"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-success" ng-click="save()">

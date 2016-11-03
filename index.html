@@ -23,12 +23,20 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a ng-click="showJson()">{{!jsonview.json ? 'JSON' : 'CANVAS'}}</a></li>
+                    <li>
+                        <button class="btn btn-default" ng-click="showJson()" style="padding-top: 10px;">
+                            {{!jsonview.json ? 'Publish JSON' : 'Show Canvas'}}
+                        </button>
+                    </li>
                 </ul>
             </div>
         </nav>
         <div class="container-fluid">
-            <div id="loader" class="loading" ng-show='loaderMessage'><span>{{loaderMessage}}</span></div>
+            <div class="loading" id="loader" ng-show="loaderMessage">
+                <span>
+                    {{loaderMessage}}
+                </span>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-12" style="padding:10px;margin-top:30px;background:white;border-radius:5px;min-height:550px">
@@ -49,19 +57,19 @@
                                         <li class="file toUpper" ng-repeat="(k, v) in value">
                                             <label class="toUpper" for="{{k}}">
                                                 {{k}}
-                                                <a ng-if="k==='joins'" ng-click="table.addJoin()" cls="btn btn-primary">
+                                                <a cls="btn btn-primary" ng-click="table.addJoin()" ng-if="k==='joins'">
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
-                                                <a ng-if="k==='tables'" ng-click="table.addTable()" cls="btn btn-primary">
+                                                <a cls="btn btn-primary" ng-click="table.addTable()" ng-if="k==='tables'">
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
-                                                <a ng-if="k =='dimensions'" ng-click="table.addDimensions()" cls="btn btn-primary">
+                                                <a cls="btn btn-primary" ng-click="table.openDimensionDetails()" ng-if="k =='dimensions'">
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
-                                                <a ng-if="k =='facts'" ng-click="table.addFacts()" cls="btn btn-primary">
+                                                <a cls="btn btn-primary" ng-click="table.addFacts()" ng-if="k =='facts'">
                                                     <i aria-hidden="true" class="fa fa-plus">
                                                     </i>
                                                 </a>
@@ -128,10 +136,39 @@
                                                     </label>
                                                     <input id="{{item.dimensionName}}" type="checkbox"/>
                                                     <ol>
-                                                        <li ng-repeat="da in item.attributes">
-                                                            <span>
-                                                                {{da.attributeTable}} - {{da.attributeName}} - {{da.attributeNameColumn}}
-                                                            </span>
+                                                        <li class="file toUpper">
+                                                            <label for="atributes">
+                                                                Attributes
+                                                            </label>
+                                                            <input id="attributes" type="checkbox"/>
+                                                            <ol>
+                                                                <li ng-repeat="attr in item.attributes">
+                                                                    <span>
+                                                                        {{attr.attributeName}}
+                                                                    </span>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                        <li class="file toUpper">
+                                                            <label for="hierarchies">
+                                                                Hierarchies
+                                                            </label>
+                                                            <input id="hierarchies" type="checkbox"/>
+                                                            <ol>
+                                                                <li class="file toUpper" ng-repeat="attr in item.hierarchies">
+                                                                    <label for="hierarchies">
+                                                                        {{attr.hierarchyName}}
+                                                                    </label>
+                                                                    <input id="hierarchies" type="checkbox"/>
+                                                                    <ol>
+                                                                        <li ng-repeat="level in attr.levels">
+                                                                            <span>
+                                                                                {{level.levelAttribute}}
+                                                                            </span>
+                                                                        </li>
+                                                                    </ol>
+                                                                </li>
+                                                            </ol>
                                                         </li>
                                                     </ol>
                                                 </li>
@@ -160,14 +197,14 @@
                                 </li>
                             </ol>
                         </div>
-                        <div class="col-md-8 dropArea" ng-show='!jsonview.json'>
+                        <div class="col-md-8 dropArea" ng-show="!jsonview.json">
                             <js-plumb-canvas on-connection="onConnection" x="pos_x" y="pos_y" zoom="zoomlevel">
                                 <ng-include ng-repeat="state in table.tableObjects track by $index" src="'views/qTable.html'">
                                 </ng-include>
                             </js-plumb-canvas>
                         </div>
                         <div class="col-md-8 jsonArea" ng-show="jsonview.json">
-                          <pre>{{table.list.schemaDefinition | json}}</pre>
+                            <pre>{{table.list.schemaDefinition | json}}</pre>
                         </div>
                     </div>
                 </div>
@@ -205,7 +242,9 @@
         </script>
         <script src="scripts/directive.js">
         </script>
-        <script src="scripts/popTable.js"></script>
-        <script src="scripts/addTable.js"></script>
+        <script src="scripts/popTable.js">
+        </script>
+        <script src="scripts/addTable.js">
+        </script>
     </body>
 </html>
