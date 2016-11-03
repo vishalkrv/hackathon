@@ -216,21 +216,71 @@ app.controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localSto
                 $scope.table.list.schemaDefinition.physical.tables.splice(index, 1);
             }
         },
-        //openJoinDetails
-        openJoinDetails: function(index) {
+        addDimensions: function() {
             var popJoin = ngDialog.open({
-                template: 'views/addJoin.html',
+                template: 'views/addDimension.html',
                 className: 'ngdialog-theme-default bigPopup',
-                controller: 'addJoinCtrl',
+                controller: 'addDimensionsCtrl',
                 resolve: {
-                    tableList: function() {
-                        return $scope.table.list.schemaDefinition.physical.tables
+                    dimensionsList: function() {
+                        return $scope.table.list.schemaDefinition.logical.dimensions
                     },
-                    joinsList: function(){
-                        return $scope.table.list.schemaDefinition.physical.joins
+                    currentDimension: function(){
+                        return undefined
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
+        },
+        addFacts: function() {
+            var popJoin = ngDialog.open({
+                template: 'views/addFact.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'factsCtrl',
+                resolve: {
+                    factsList: function() {
+                        return $scope.table.list.schemaDefinition.logical.facts
                     },
-                    currentJoin: function(){
-                        return $scope.table.list.schemaDefinition.physical.joins[index]
+                    currentFact: function(){
+                        return undefined
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
+        },
+        openDimensionDetails: function(index) {
+            var popJoin = ngDialog.open({
+                template: 'views/addDimension.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'addDimensionsCtrl',
+                resolve: {
+                    dimensionsList: function() {
+                        return $scope.table.list.schemaDefinition.logical.dimensions
+                    },
+                    currentDimension: function(){
+                        return $scope.table.list.schemaDefinition.logical.dimensions[index]
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
+        },
+        openFactDetails: function(index) {
+            var popJoin = ngDialog.open({
+                template: 'views/addFact.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'factsCtrl',
+                resolve: {
+                    factsList: function() {
+                        return $scope.table.list.schemaDefinition.logical.facts
+                    },
+                    currentFact: function(){
+                        return $scope.table.list.schemaDefinition.logical.facts[index]
                     }
                 }
             });
@@ -358,4 +408,246 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
     $scope.removeJoin = function(index){
         $scope.join.joinColumns.splice(index, 1);
     }
-}])
+}]);
+
+app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimension', 'uiGridConstants', function($scope, dimensionsList, currentDimension, uiGridConstants) {
+    $scope.dimensionsList = dimensionsList;
+    $scope.currentDimension = currentDimension;
+    $scope.dimension = {
+        "dimensionName": "",
+        "dimensionTemplate": "",
+        "attributes": [
+            {
+                "attributeName": "",
+                "attributeTemplate": "",
+                "attributeTable": "",
+                "attributeNameColumn": "",
+                "attributeSortColumn": "",
+                "attributeFormat": "none",
+                "attributeParents": [
+                    {
+                        "attrbiuteParent": ""
+                    }
+                ],
+                "attributeKeyColumns": [
+                    {
+                        "attrbiuteKeyTable": "",
+                        "attrbiuteKeyColumn": ""
+                    }
+                ]
+            }
+        ],
+        "hierarchies": [
+            {
+                "hierarchyName": "",
+                "levels": [
+                    {
+                        "levelAttribute": ""
+                    }, {
+                        "levelAttribute": ""
+                    }, {
+                        "levelAttribute": ""
+                    }, {
+                        "levelAttribute": ""
+                    }
+                ]
+            }
+        ]
+    };
+
+    if($scope.currentDimension){
+        $scope.dimension = currentDimension;
+    }
+
+    $scope.save = function(){
+        if(!$scope.currentDimension){
+            $scope.dimensionsList.push($scope.dimension);
+        }
+        $scope.closeThisDialog();
+    }
+
+    $scope.addNewRow = function(){
+        $scope.gridOptions.data.push({
+            "attributeName": "",
+            "attributeTemplate": "",
+            "attributeTable": "",
+            "attributeNameColumn": "",
+            "attributeSortColumn": ""
+      });
+    };
+    $scope.deleteRow = function(row) {
+        var index = $scope.gridOptions.data.indexOf(row.entity);
+        $scope.gridOptions.data.splice(index, 1);
+   };
+    $scope.gridOptions = {
+        data:$scope.dimension.attributes,
+        columnDefs: [{
+            name: 'attributeName',
+            displayName: 'Name',
+            cellEditableCondition: true
+        },{
+            name: 'attributeTemplate',
+            displayName: 'Template Name',
+            cellEditableCondition: true
+        },{
+            name: 'attributeTable',
+            displayName: 'Table',
+            cellEditableCondition: true
+        }, {
+            name: 'attributeNameColumn',
+            displayName: 'Column Name',
+            cellEditableCondition: true
+        }, {
+            name: 'attributeSortColumn',
+            displayName: 'Sort Column Name',
+            cellEditableCondition: true
+        }, {
+            name: 'delete',
+            displayName: '',
+            cellEditableCondition: false,
+            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
+        }],
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        multiSelect: false,
+        onRegisterApi: function( gridApi ) {
+            $scope.gridApi = gridApi;
+        }
+    };
+}]);
+
+app.controller('factsCtrl', ['$scope', 'factsList', 'currentFact', 'uiGridConstants', function($scope, factsList, currentFact, uiGridConstants) {
+    $scope.factsList = factsList;
+    $scope.currentFact = currentFact;
+    $scope.fact = {
+        "factName": "",
+        "factTemplate": "",
+        "factTable": "",
+        "keys": [
+            {
+                "keyDimension": "Time",
+                "keyAttribute": "Week",
+                "keyRole": "none",
+                "keyColumns": {
+                    "keyColumn": "Week_Id"
+                }
+            }, {
+                "keyDimension": "Product",
+                "keyAttribute": "UPC",
+                "keyRole": "none",
+                "keyColumns": {
+                    "keyColumn": "UPC_Id"
+                }
+            }, {
+                "keyDimension": "Customer",
+                "keyAttribute": "Store",
+                "keyRole": "none",
+                "keyColumns": {
+                    "keyColumn": "Store_Id"
+                }
+            }
+        ],
+        "measures": [
+            {
+                "measureName": "Shipped Quantity",
+                "measureColumn": "Ship_Qty",
+                "measureFormat": "#,#",
+                "measureAggregation": "sum",
+                "measurePolarity": "positive",
+                "measureClass": "vol",
+                "measureLocalizations": {
+                    "measureLocalization": {
+                        "attributeLanguage": "German",
+                        "attributeLocal": "Zeit"
+                    }
+                }
+            }, {
+                "measureName": "Shipped Value",
+                "measureColumn": "Ship_Val",
+                "measureFormat": "$#,#.00",
+                "measureAggregation": "sum",
+                "measurePolarity": "positive",
+                "measureClass": "fin"
+            }
+        ],
+        "aggregates": [
+            {
+                "aggregateTableName": "Fact_Ship_by_Ret_Yr",
+                "aggregateKeys": [
+                    {
+                        "aggregateKeyDimension": "Time",
+                        "aggregateKeyAttribute": "Year",
+                        "aggregateKeyRole": "none",
+                        "aggregateKeyColumns": {
+                            "keyColumn": "Year_Id"
+                        }
+                    }, {
+                        "aggregateKeyDimension": "Product",
+                        "aggregateKeyAttribute": "UPC",
+                        "aggregateKeyRole": "none",
+                        "aggregateKeyColumns": {
+                            "keyColumn": "UPC_Id"
+                        }
+                    }, {
+                        "aggregateKeyDimension": "Customer",
+                        "aggregateKeyAttribute": "Retailer",
+                        "aggregateKeyRole": "none",
+                        "aggregateKeyColumns": {
+                            "keyColumn": "Retailer_Id"
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+    if($scope.currentFact){
+        $scope.fact = currentFact;
+    }
+
+    $scope.save = function(){
+        if(!$scope.currentFact){
+            $scope.factsList.push($scope.fact);
+        }
+        $scope.closeThisDialog();
+    }
+
+    $scope.addNewRow = function(){
+        $scope.gridOptions.data.push({
+            "keyDimension": "",
+            "keyAttribute": "",
+            "keyRole": ""
+        });
+    };
+    $scope.deleteRow = function(row) {
+        var index = $scope.gridOptions.data.indexOf(row.entity);
+        $scope.gridOptions.data.splice(index, 1);
+    };
+    $scope.gridOptions = {
+        data:$scope.fact.keys,
+        columnDefs: [{
+            name: 'keyDimension',
+            displayName: 'Key Dimension',
+            cellEditableCondition: true
+        },{
+            name: 'keyAttribute',
+            displayName: 'Key Attribute',
+            cellEditableCondition: true
+        },{
+            name: 'keyRole',
+            displayName: 'Key Role',
+            cellEditableCondition: true
+        }, {
+            name: 'delete',
+            displayName: '',
+            cellEditableCondition: false,
+            cellTemplate: '<button class="btn btn-primary btn-delete" ng-click="grid.appScope.deleteRow(row)">Delete</button>'
+        }],
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        multiSelect: false,
+        onRegisterApi: function( gridApi ) {
+            $scope.gridApi = gridApi;
+        }
+    };
+}]);

@@ -49,16 +49,24 @@
                                             <label class="toUpper" for="{{k}}">
                                                 {{k}}
                                                 <a ng-if="k==='joins'" ng-click="table.addJoin()" cls="btn btn-primary">
-                                                            <i aria-hidden="true" class="fa fa-plus">
-                                                            </i>
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
                                                 </a>
                                                 <a ng-if="k==='tables'" ng-click="table.addTable()" cls="btn btn-primary">
-                                                            <i aria-hidden="true" class="fa fa-plus">
-                                                            </i>
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a ng-if="k =='dimensions'" ng-click="table.addDimensions()" cls="btn btn-primary">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
+                                                </a>
+                                                <a ng-if="k =='facts'" ng-click="table.addFacts()" cls="btn btn-primary">
+                                                    <i aria-hidden="true" class="fa fa-plus">
+                                                    </i>
                                                 </a>
                                                 <a cls="btn btn-primary" ng-click="table.openPopup(value, k)">
-                                                            <i aria-hidden="true" class="fa fa-external-link">
-                                                            </i>
+                                                    <i aria-hidden="true" class="fa fa-external-link">
+                                                    </i>
                                                 </a>
                                             </label>
                                             <input checked="" id="{{k}}" type="checkbox"/>
@@ -112,7 +120,7 @@
                                                 <li class="file toUpper" ng-repeat="item in v">
                                                     <label for="{{item.dimensionName}}">
                                                         {{item.dimensionName}}
-                                                        <a cls="btn btn-primary" ng-click="table.openDimensionNameDetails($index)">
+                                                        <a cls="btn btn-primary" ng-click="table.openDimensionDetails($index)">
                                                             <i aria-hidden="true" class="fa fa-external-link">
                                                             </i>
                                                         </a>
@@ -131,7 +139,7 @@
                                                 <li class="file toUpper" ng-repeat="item in v">
                                                     <label for="{{item.factName}}">
                                                         {{item.factName}}
-                                                        <a cls="btn btn-primary" ng-click="table.openFactNameDetails($index)">
+                                                        <a cls="btn btn-primary" ng-click="table.openFactDetails($index)">
                                                             <i aria-hidden="true" class="fa fa-external-link">
                                                             </i>
                                                         </a>
