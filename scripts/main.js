@@ -446,7 +446,7 @@ angular.module('NDXHackathon').controller('addJoinCtrl', ['$scope', 'tableList',
 
 app.controller('addDimensionsCtrl', ['$scope', 'dimensionsList', 'currentDimension', 'uiGridConstants', function($scope, dimensionsList, currentDimension, uiGridConstants) {
     $scope.dimensionsList = dimensionsList;
-    $scope.currentc = currentDimension;
+    $scope.currentDimension = currentDimension;
     $scope.dimension = {
         "dimensionName": "",
         "dimensionTemplate": "",
