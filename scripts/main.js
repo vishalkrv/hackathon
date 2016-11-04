@@ -8,7 +8,7 @@ angular.module('NDXHackathon').config(['$httpProvider', function($httpProvider) 
     $httpProvider.defaults.timeout = 5000;
 }]);
 app.constant('myConfig', {
-    "url": 'assets/sample/'
+    "url": "http://" + window.location.hostname+':9099'+ "/"
 });
 angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage, $interval) {
     $scope.zoomlevel = 55;
@@ -23,10 +23,10 @@ angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ng
     }
     var database = {
         load: function() {
-            $http.get(myConfig.url + 'database.json').then(function(response) {
+            $http.get(myConfig.url + 'database').then(function(response) {
                 database.list = response.data.database;
-                //popup.open();
-                popup.loadData();
+                popup.open();
+                //popup.loadData();
             });
         },
         list: ''

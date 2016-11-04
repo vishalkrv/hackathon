@@ -9,8 +9,8 @@
             Database Name
         </label>
         <select class="form-control" ng-model="selectedDatabase">
-            <option ng-value="{{item.name}}" ng-repeat="item in databaseList track by $index">
-                {{item.name}}
+            <option ng-value="item" ng-repeat="item in databaseList track by $index">
+                {{item}}
             </option>
         </select>
     </div>
