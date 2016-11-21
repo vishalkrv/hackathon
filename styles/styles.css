@@ -452,4 +452,8 @@ div#loader span {
   position: relative;
   top: 8px;
 }
+
+.navbar-inverse {
+    background-color: #8BC34A !important;
+}
 /*Loader End*/

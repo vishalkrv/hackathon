@@ -8,7 +8,10 @@ angular.module('NDXHackathon').config(['$httpProvider', function($httpProvider) 
     $httpProvider.defaults.timeout = 5000;
 }]);
 app.constant('myConfig', {
-    "url": "http://" + window.location.hostname+':9099'+ "/"
+    "url": "http://" + window.location.hostname+':8089'+ "/",
+    "newUrl": "http://" + window.location.hostname+':8080'+ "/"
+    //"url": "http://dayrhegapd022.enterprisenet.org:8089/",
+    //"newUrl": "http://dayrhegapd022.enterprisenet.org:8080/"
 });
 angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ngDialog, myConfig, $localStorage, $interval) {
     $scope.zoomlevel = 55;
@@ -20,54 +23,47 @@ angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ng
     var getNextUUID = function() {
         $localStorage.lastUUID++;
         return $localStorage.lastUUID;
-    }
+    };
     var database = {
         load: function() {
             $http.get(myConfig.url + 'database').then(function(response) {
-                database.list = response.data.database;
+                database.list = response.data;
                 popup.open();
                 //popup.loadData();
             });
         },
         list: ''
     };
-    $scope.loaderMessage = '';
     $scope.loader = function() {
-        var timer = 0;
-        $interval.cancel(timer);
+        $scope.loaderMessage = '...Magic Starts';
+        $scope.timer = 0;
+        $interval.cancel($scope.timer);
         var value = 0;
-        timer = $interval(function() {
+        $scope.timer = $interval(function() {
             value++;
             if (value == 20) {
                 $scope.loaderMessage = "Analysing Configuration";
-            } else if (value == 40) {
-                $scope.loaderMessage = "Analysing Sources";
-            } else if (value == 60) {
-                $scope.loaderMessage = "Analysing Tables";
             } else if (value == 80) {
-                $scope.loaderMessage = "Analysing Joins";
-            } else if (value == 100) {
-                $scope.loaderMessage = "Analysing Dimensions";
+                $scope.loaderMessage = "Analysing Sources";
             } else if (value == 120) {
-                $scope.loaderMessage = "Analysing Facts";
+                $scope.loaderMessage = "Analysing Tables";
             } else if (value == 140) {
-                $scope.loaderMessage = "Loading...";
-            } else if (value == 160) {
-                $scope.loaderMessage = "Loading JSON";
+                $scope.loaderMessage = "Analysing Joins";
             } else if (value == 170) {
-                $scope.loaderMessage = "Ready";
-            } else if (value == 180) {
-                $interval.cancel(timer);
-                $scope.loaderMessage = false;
+                $scope.loaderMessage = "Analysing Dimensions";
+            } else if (value == 200) {
+                $scope.loaderMessage = "Analysing Facts";
+            } else if (value == 210) {
+                $scope.loaderMessage = "Loading...";
             }
         }, 100);
     };
-    //$scope.loader();
     database.load();
     var popup = {
         open: function() {
             var modal = ngDialog.open({
                 closeByEscape: false,
+                showClose: false,
                 closeByDocument: false,
                 template: 'views/modalContent.html',
                 className: 'ngdialog-theme-default',
@@ -79,17 +75,25 @@ angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ng
                 }
             });
             modal.closePromise.then(function(data) {
-                popup.loadData();
+                popup.loadData(data);
             });
         },
-        loadData: function() {
-            $http.get(myConfig.url + 'sample.json').then(function(response) {
-                $scope.table.list = response.data;
-                $scope.loadPlumbs();
-                console.log($scope.table.list);
+        loadData: function(data) {
+            $scope.loader();
+            $http.get(myConfig.url + 'dbAnalyzer?dbName=' + data.value).then(function(response) {
+                getJson(response.data);
             });
         }
     };
+
+    function getJson(name) {
+        $http.get(myConfig.newUrl + 'UI/' + name.jsonFileName).then(function(response) {
+            $interval.cancel($scope.timer);
+            $scope.loaderMessage = false;
+            $scope.table.list = response.data;
+            $scope.loadPlumbs();
+        });
+    }
     $scope.getIndexOf = function(arr, val, prop) {
         var l = arr.length,
             k = 0;
@@ -102,9 +106,21 @@ angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ng
     $scope.jsonview = {
         json: false
     }
+    $scope.updatedJson = '';
+    $scope.$watch('jsonview.json', function(value, key) {
+        if (value) {
+            $scope.updatedJson = angular.copy($scope.table.list);
+            angular.forEach($scope.updatedJson.schemaDefinition.physical.tables, function(value, key) {
+                delete value.sources;
+                delete value.targets;
+                delete value.x;
+                delete value.y;
+            });
+        }
+    });
     $scope.showJson = function() {
         $scope.jsonview.json = !$scope.jsonview.json;
-    }
+    };
     $scope.loadPlumbs = function() {
         // Adds all the tables to the CANVAS
         angular.forEach($scope.table.list.schemaDefinition.physical.tables, function(val, idx) {
@@ -279,6 +295,27 @@ angular.module('NDXHackathon').controller('MainCtrl', function($scope, $http, ng
                 console.log(data);
             });
         },
+        openJoinDetails: function(index) {
+            var popJoin = ngDialog.open({
+                template: 'views/addJoin.html',
+                className: 'ngdialog-theme-default bigPopup',
+                controller: 'addJoinCtrl',
+                resolve: {
+                    tableList: function() {
+                        return $scope.table.list.schemaDefinition.physical.tables
+                    },
+                    joinsList: function() {
+                        return $scope.table.list.schemaDefinition.physical.joins
+                    },
+                    currentJoin: function() {
+                        return $scope.table.list.schemaDefinition.physical.joins[index]
+                    }
+                }
+            });
+            popJoin.closePromise.then(function(data) {
+                console.log(data);
+            });
+        },
         addFacts: function() {
             var popJoin = ngDialog.open({
                 template: 'views/addFact.html',
@@ -406,4 +443,3 @@ angular.module('NDXHackathon').controller('popupInfoCtrl', ['$scope', 'data', fu
     $scope.data = data;
     console.log(data);
 }]);
-

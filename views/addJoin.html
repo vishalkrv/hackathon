@@ -69,10 +69,10 @@
                   <td class="center">
                       {{join.joinColumns.length - 1 != $index ? col.columnFrom : ''}}
                       <select class="form-control" id="joinColsFrom" name="joinColsFrom" ng-model="join.joinColumns[$index].columnFrom" ng-if="join.joinColumns.length - 1 === $index">
-                          <option value="" selected="selected" ng-if="!currentJoin">
+                          <option value="" ng-if="!currentJoin">
                               --SELECT--
                           </option>
-                          <option ng-repeat="column in fromCols" value="{{column.columnName}}" ng-selected="column.columnName === join.joinColumns[$index].columnFrom">
+                          <option ng-repeat="column in fromCols" ng-value="{{column.columnName}}">
                               {{column.columnName}}
                           </option>
                       </select>
@@ -81,10 +81,10 @@
                   <td class="center">
                       {{join.joinColumns.length - 1 != $index ? col.columnTo : ''}}
                       <select class="form-control" id="joinColsTo" name="joinColsTo" ng-model="join.joinColumns[$index].columnTo" ng-if="join.joinColumns.length - 1 === $index">
-                          <option value="" selected="selected" ng-if="!currentJoin">
+                          <option value="" ng-if="!currentJoin">
                               --SELECT--
                           </option>
-                          <option ng-repeat="column in toCols" value="{{column.columnName}}" ng-selected="column.columnName === join.joinColumns[$index].columnTo">
+                          <option ng-repeat="column in toCols" ng-value="{{column.columnName}}">
                               {{column.columnName}}
                           </option>
                       </select>

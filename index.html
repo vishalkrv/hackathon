@@ -18,8 +18,8 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header" draggable="true">
-                    <a class="navbar-brand" href="#">
-                        NDX Hackathon
+                    <a class="navbar-brand" href="#" style="margin-top: -22px;">
+                        <img src="assets/images/logo.png" alt="" style="width: 73px;height: 65px;">
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
@@ -32,7 +32,7 @@
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="loading" id="loader" ng-show="loaderMessage">
+            <div ng-cloak class="loading" id="loader" ng-show="loaderMessage">
                 <span>
                     {{loaderMessage}}
                 </span>
@@ -56,7 +56,7 @@
                             </js-plumb-canvas>
                         </div>
                         <div class="col-md-8 jsonArea" ng-show="jsonview.json">
-                            <pre>{{table.list.schemaDefinition | json}}</pre>
+                            <pre>{{updatedJson | json}}</pre>
                         </div>
                     </div>
                 </div>
